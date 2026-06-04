@@ -153,3 +153,17 @@ body.bmi-alert-caution main {
   border-radius: 9999px;
   background: var(--color-hairline);
 }
+
+/* Honor reduced motion per web guidelines */
+@media (prefers-reduced-motion: reduce) {
+  .bmi-alert-overlay,
+  body.bmi-alert-critical,
+  .bmi-scene-card,
+  .gallery-card,
+  #bmi-marker,
+  .transition-all,
+  .transition {
+    animation: none !important;
+    transition: none !important;
+  }
+}

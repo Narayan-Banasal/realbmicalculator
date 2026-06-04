@@ -36,15 +36,13 @@ const legal = [
           </a>
         ))}
       </nav>
-      <button
-        type="button"
-        id="theme-toggle"
-        class="rounded-lg border border-(--color-hairline) bg-(--color-canvas) px-3 py-1.5 text-sm font-medium text-(--color-ink) transition hover:border-(--color-accent)"
-        aria-label="Toggle dark mode"
-      >
-        <span class="dark:hidden">Dark</span>
-        <span class="hidden dark:inline">Light</span>
-      </button>
+      <!-- Theme dropdown: default white/light as requested. Easy toggle to dark or system. Keeps UI simple & personal. Good idea for accessibility & preference (per design guidelines). -->
+      <label class="text-xs text-(--color-mute) hidden sm:inline">Theme</label>
+      <select id="theme-select" class="rounded-lg border border-(--color-hairline) bg-(--color-canvas) px-2 py-1 text-sm text-(--color-ink) focus:border-(--color-accent) focus:ring-1 focus:ring-(--color-accent)/30" aria-label="Choose color theme">
+        <option value="light">Light (default)</option>
+        <option value="dark">Dark</option>
+        <option value="system">System</option>
+      </select>
     </div>
   </div>
 </header>
@@ -52,12 +50,29 @@ const legal = [
 <script>
   const key = "rbmi-theme";
   const root = document.documentElement;
-  const stored = localStorage.getItem(key);
-  if (stored === "dark" || (!stored && matchMedia("(prefers-color-scheme: dark)").matches)) {
-    root.classList.add("dark");
+  const sel = document.getElementById("theme-select") as HTMLSelectElement | null;
+
+  function applyTheme(mode: string) {
+    root.classList.remove("dark");
+    if (mode === "dark" || (mode === "system" && matchMedia("(prefers-color-scheme: dark)").matches)) {
+      root.classList.add("dark");
+    }
+    if (sel) sel.value = mode;
   }
-  document.getElementById("theme-toggle")?.addEventListener("click", () => {
-    root.classList.toggle("dark");
-    localStorage.setItem(key, root.classList.contains("dark") ? "dark" : "light");
+
+  const stored = localStorage.getItem(key) || "light";
+  applyTheme(stored);
+
+  if (sel) {
+    sel.addEventListener("change", () => {
+      const mode = sel.value;
+      localStorage.setItem(key, mode);
+      applyTheme(mode);
+    });
+  }
+
+  // respect system changes if "system" selected
+  matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => {
+    if (localStorage.getItem(key) === "system") applyTheme("system");
   });
 </script>
