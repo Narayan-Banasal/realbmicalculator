@@ -23,6 +23,8 @@ You are building **realbmicalculator.com** (Real BMI Calculator) using the Compi
 
 See `../bmi-research/BMI-CALCULATOR-RESEARCH.md` for competitor analysis.
 
+Use `wiki/` (Karpathy LLM Wiki pattern: index.md catalog + log.md + sources/entities/concepts/synthesis) for retained project knowledge. Read wiki/index.md first on queries/ingests.
+
 ## User preference
 
 Narayan will iterate with you here instead of Claude Code. Ask before large scope changes.

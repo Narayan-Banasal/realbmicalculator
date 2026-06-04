@@ -20,6 +20,7 @@ npm run deploy   # build + wrangler (after wrangler login)
 - `AGENTS.md` — AI agent instructions (Cursor/Grok)
 - `DESIGN.md` — Vercel design tokens
 - `../bmi-research/` — competitor research
+- `wiki/` — Karpathy-style LLM wiki (index + log + synthesized knowledge from docs/research/src)
 
 ## Domain
 
