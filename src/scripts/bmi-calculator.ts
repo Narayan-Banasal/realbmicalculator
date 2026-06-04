@@ -8,14 +8,12 @@ import {
   kgToLb,
   lbToKg,
   markerPosition,
-  shouldTriggerAlert,
   type UnitSystem,
 } from '../lib/bmi';
 
 import * as THREE from 'three';
 
 const STORAGE_UNITS = 'rbmi-units';
-const STORAGE_ALERT = 'rbmi-alert-dismissed';
 
 export function initBmiCalculator() {
   const root = document.getElementById('bmi-calculator');
@@ -23,7 +21,6 @@ export function initBmiCalculator() {
 
   let units: UnitSystem =
     (localStorage.getItem(STORAGE_UNITS) as UnitSystem) || 'metric';
-  let alertDismissed = sessionStorage.getItem(STORAGE_ALERT) === '1';
 
   const els = {
     metricPanel: document.getElementById('height-metric')!,
@@ -48,17 +45,12 @@ export function initBmiCalculator() {
     displayHeight: document.getElementById('display-height')!,
     displayWeight: document.getElementById('display-weight')!,
     visualActive: document.getElementById('visual-active-card')!,
-    alertBanner: document.getElementById('bmi-alert-banner')!,
-    alertOverlay: document.getElementById('bmi-alert-overlay')!,
     sceneCards: document.querySelectorAll<HTMLElement>('[data-scene-card]'),
     galleryCards: document.querySelectorAll<HTMLElement>('[data-gallery-card]'),
     bodyModelContainer: document.getElementById('body-model-container')!,
     bodyModelInner: document.getElementById('body-model-inner')!,
     bodyModel: document.getElementById('body-model') as HTMLImageElement,
-    modelAlarm: document.getElementById('model-alarm')!,
     bodyStatus: document.getElementById('body-status')!,
-    recsPanel: document.getElementById('recs-panel')!,
-    recsContent: document.getElementById('recs-content')!,
   };
 
   function syncPair(range: HTMLInputElement, number: HTMLInputElement, decimals = 0) {
@@ -74,13 +66,11 @@ export function initBmiCalculator() {
   function bindSlider(range: HTMLInputElement, number: HTMLInputElement, decimals = 0) {
     range.addEventListener('input', () => {
       syncPair(range, number, decimals);
-      clearTimeout(alertTimeout); // keep adjusting, delay any alert
       updateLiveViz();
       calc();
     });
     number.addEventListener('input', () => {
       syncFromNumber(range, number);
-      clearTimeout(alertTimeout);
       updateLiveViz();
       calc();
     });
@@ -108,7 +98,6 @@ export function initBmiCalculator() {
   root.querySelectorAll<HTMLButtonElement>('[data-nudge]').forEach((btn) => {
     btn.addEventListener('click', () => {
       nudge(btn.dataset.nudge!, parseFloat(btn.dataset.delta!));
-      clearTimeout(alertTimeout);
       updateLiveViz();
     });
   });
@@ -122,8 +111,6 @@ export function initBmiCalculator() {
     btn.addEventListener('click', () => {
       const p = presets[btn.dataset.preset!];
       if (!p) return;
-      alertDismissed = false;
-      sessionStorage.removeItem(STORAGE_ALERT);
       els.heightCm.value = String(p.cm);
       els.heightCmRange.value = String(p.cm);
       els.weightKg.value = String(p.kg);
@@ -134,20 +121,18 @@ export function initBmiCalculator() {
       els.heightInRange.value = String(p.inch);
       els.weightLb.value = String(p.lb);
       els.weightLbRange.value = String(p.lb);
-      clearTimeout(alertTimeout);
       updateLiveViz();
       calc();
     });
   });
 
-  // Update recs live if age/gender change while result is shown (more personal value)
   const ageInp = document.getElementById('age');
   if (ageInp) ageInp.addEventListener('input', () => {
     if (!els.resultPanel.classList.contains('hidden')) calc();
   });
   document.querySelectorAll('input[name="gender"]').forEach((r) => {
     r.addEventListener('change', () => {
-      updateLiveViz(); // live 3D gender proportion change
+      updateLiveViz(); // live body viz update on gender
       if (!els.resultPanel.classList.contains('hidden')) calc();
     });
   });
@@ -186,7 +171,6 @@ export function initBmiCalculator() {
     els.unitToggle.setAttribute('aria-checked', u === 'us' ? 'true' : 'false');
     els.unitToggle.dataset.units = u;
     document.dispatchEvent(new CustomEvent('rbmi:units', { detail: { units: u } }));
-    clearTimeout(alertTimeout);
     updateLiveViz();
     calc();
   }
@@ -232,82 +216,6 @@ export function initBmiCalculator() {
     if (label) label.textContent = catLabel;
   }
 
-  // (2D viz code removed; real Three.js 3D model code is now in place at the end of the init function)
-
-    // torso (main reacting part - "3D" with gradient for depth)
-    const tTop = 82;
-  function updateRecs(bmi: number, cat: any, heightM: number) {
-    const panel = els.recsPanel;
-    const cont = els.recsContent;
-    if (!panel || !cont) return;
-    if (!bmi || (cat.id !== 'obese' && cat.id !== 'underweight')) {
-      panel.classList.add('hidden');
-      return;
-    }
-    panel.classList.remove('hidden');
-
-    const range = healthyWeightRangeKg(heightM);
-    const curW = units === 'metric' ? parseFloat(els.weightKg.value) || 70 : lbToKg(parseFloat(els.weightLb.value) || 160);
-    const ageEl = document.getElementById('age') as HTMLInputElement | null;
-    const gEl = document.querySelector('input[name="gender"]:checked') as HTMLInputElement | null;
-    const age = ageEl && ageEl.value ? parseInt(ageEl.value) : 30;
-    const g = gEl ? gEl.value : 'unspecified';
-
-    let html = '';
-    if (cat.id === 'obese') {
-      const toLose = Math.max(0, (curW - range.hi)).toFixed(1);
-      html = `<p class="font-medium">BMI ${bmi.toFixed(1)} — ${cat.label}</p>
-        <p>Target upper healthy: <strong>${range.hi.toFixed(1)} kg</strong> (lose ~${toLose} kg safely).</p>
-        <ul class="mt-1 text-xs list-disc pl-4 space-y-0.5">
-          <li>~500 kcal daily deficit (diet + movement) for ~0.5 kg/week.</li>
-          <li>${age}yo ${g}: emphasize protein + veg, 150+ min brisk activity/week + strength 2x.</li>
-          <li>Track waist too. Sleep 7-9h. Small wins add up fast.</li>
-        </ul>`;
-    } else {
-      const toGain = Math.max(0, (range.lo - curW)).toFixed(1);
-      html = `<p class="font-medium">BMI ${bmi.toFixed(1)} — ${cat.label}</p>
-        <p>Target lower healthy: <strong>${range.lo.toFixed(1)} kg</strong> (gain ~${toGain} kg gradually).</p>
-        <ul class="mt-1 text-xs list-disc pl-4 space-y-0.5">
-          <li>Add calorie-dense nutritious foods (nuts, yogurt, oils, fruits).</li>
-          <li>${age}yo ${g}: resistance training to gain muscle, not just fat.</li>
-          <li>If loss was unintentional, speak with a clinician soon.</li>
-        </ul>`;
-    }
-    cont.innerHTML = html;
-  }
-
-  function applyAlert(bmi: number) {
-    const level = shouldTriggerAlert(bmi);
-    const body = document.body;
-    body.classList.remove('bmi-alert-caution', 'bmi-alert-critical');
-    els.alertBanner.classList.add('hidden');
-    els.alertOverlay.classList.add('hidden');
-    if (!level || alertDismissed) return;
-
-    if (level === 'critical') {
-      body.classList.add('bmi-alert-critical');
-      els.alertOverlay.classList.remove('hidden');
-      // stronger screen redness + personal alarming message for impact
-      els.alertOverlay.style.background = 'radial-gradient(ellipse at center, rgba(239,68,68,0.55), rgba(127,29,29,0.35))';
-    } else {
-      body.classList.add('bmi-alert-caution');
-    }
-    els.alertBanner.classList.remove('hidden');
-    const title = document.getElementById('alert-title')!;
-    const msg = document.getElementById('alert-message')!;
-    if (bmi >= 30) {
-      title.textContent = bmi >= 35 ? '⚠ SEVERE HEALTH RISK' : '⚠ ELEVATED BMI — ACT NOW';
-      msg.textContent =
-        bmi >= 35
-          ? 'Your BMI indicates severe obesity. This significantly raises risks for diabetes, heart disease & more. See a doctor soon and start small sustainable changes today.'
-          : 'Obese range. Risks rise with time. Use the plan below to begin reversing it safely.';
-    } else {
-      title.textContent = '⚠ LOW BMI NOTICE';
-      msg.textContent =
-        'Below healthy. Unintended loss needs evaluation. Focus on nutrient-rich intake and strength to rebuild safely.';
-    }
-  }
-
   function calc() {
     let result: { bmi: number; heightM: number } | null = null;
 
@@ -328,11 +236,6 @@ export function initBmiCalculator() {
 
     if (!result || !isFinite(result.bmi)) {
       els.resultPanel.classList.add('hidden');
-      document.body.classList.remove('bmi-alert-caution', 'bmi-alert-critical');
-      els.alertBanner.classList.add('hidden');
-      els.alertOverlay.classList.add('hidden');
-      if (els.recsPanel) els.recsPanel.classList.add('hidden');
-      clearTimeout(alertTimeout);
       updateLiveViz();
       return;
     }
@@ -359,28 +262,7 @@ export function initBmiCalculator() {
 
     highlightVisuals(cat.id, cat.label);
     updateLiveViz();
-    // debounce alert: do not show red screen/dismiss while user is actively adjusting (prevents taking control)
-    clearTimeout(alertTimeout);
-    const level = shouldTriggerAlert(bmi);
-    if (level) {
-      alertTimeout = setTimeout(() => {
-        applyAlert(bmi);
-      }, 650);
-    } else {
-      document.body.classList.remove('bmi-alert-caution', 'bmi-alert-critical');
-      els.alertBanner.classList.add('hidden');
-      els.alertOverlay.classList.add('hidden');
-    }
-    updateRecs(bmi, cat, heightM);
   }
-
-  document.getElementById('dismiss-alert')?.addEventListener('click', () => {
-    alertDismissed = true;
-    sessionStorage.setItem(STORAGE_ALERT, '1');
-    document.body.classList.remove('bmi-alert-caution', 'bmi-alert-critical');
-    els.alertBanner.classList.add('hidden');
-    els.alertOverlay.classList.add('hidden');
-  });
 
   document.getElementById('copy-result')?.addEventListener('click', async () => {
     const params = new URLSearchParams({ units });
@@ -431,7 +313,6 @@ export function initBmiCalculator() {
   };
 
   let modelRotY = 0;
-  let alertTimeout = null;
 
   function updateBodyViz() {
     const img = els.bodyModel;
@@ -471,10 +352,6 @@ export function initBmiCalculator() {
     img.style.transform = `scaleX(${fatS})`;
     if (els.bodyStatus) {
       els.bodyStatus.textContent = `${cat.label} • ${bmi.toFixed(1)} (illustrative)`;
-    }
-    // model only alarm tint (not full screen, no interrupt while adjusting)
-    if (els.modelAlarm) {
-      els.modelAlarm.style.opacity = (bmi >= 30 || bmi < 17) ? (bmi >= 35 ? '0.45' : '0.3') : '0';
     }
   }
 
