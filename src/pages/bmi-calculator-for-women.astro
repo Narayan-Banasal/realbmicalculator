@@ -1,0 +1,24 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import BmiCalculator from '../components/BmiCalculator.astro';
+---
+
+<BaseLayout
+  title="BMI Calculator for Women"
+  description="BMI calculator for women — same WHO adult formula with guidance on body composition and limitations."
+>
+  <div class="mx-auto max-w-6xl px-4 py-10 sm:px-6">
+    <h1 class="font-display text-4xl font-bold text-(--color-ink)">BMI Calculator for Women</h1>
+    <p class="mt-4 max-w-2xl text-(--color-body)">
+      The standard adult BMI formula is the same for women and men. Differences in body composition mean
+      BMI alone may not reflect health risk—especially during pregnancy or high muscle mass. Use the
+      calculator below, then discuss results with your clinician if needed.
+    </p>
+    <div class="mt-10 max-w-xl">
+      <BmiCalculator />
+    </div>
+    <p class="mt-8 text-sm text-(--color-body)">
+      <a href="/" class="text-(--color-link) hover:underline">← Main BMI calculator</a>
+    </p>
+  </div>
+</BaseLayout>

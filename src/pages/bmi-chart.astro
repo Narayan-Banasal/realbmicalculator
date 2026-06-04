@@ -1,0 +1,36 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="BMI Chart"
+  description="Adult BMI chart and category table — underweight, normal, overweight, and obese BMI ranges."
+>
+  <div class="mx-auto max-w-3xl px-4 py-12 sm:px-6">
+    <h1 class="font-display text-4xl font-bold text-(--color-ink)">BMI Chart</h1>
+    <p class="mt-4 text-(--color-body)">
+      Reference table for adult body mass index categories (WHO). Use our
+      <a href="/" class="text-(--color-link) hover:underline">BMI calculator</a> for a personal result.
+    </p>
+    <div class="mt-8 overflow-x-auto rounded-xl border border-(--color-hairline)">
+      <table class="w-full text-left text-sm">
+        <thead class="bg-(--color-canvas)">
+          <tr>
+            <th class="px-4 py-3 font-semibold text-(--color-ink)">Classification</th>
+            <th class="px-4 py-3 font-semibold text-(--color-ink)">BMI (kg/m²)</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-(--color-hairline)">
+          <tr><td class="px-4 py-3">Severe thinness</td><td class="px-4 py-3">&lt; 16</td></tr>
+          <tr><td class="px-4 py-3">Moderate thinness</td><td class="px-4 py-3">16 – 16.9</td></tr>
+          <tr><td class="px-4 py-3">Mild thinness</td><td class="px-4 py-3">17 – 18.4</td></tr>
+          <tr class="bg-(--color-normal)/10"><td class="px-4 py-3 font-medium">Normal</td><td class="px-4 py-3">18.5 – 24.9</td></tr>
+          <tr><td class="px-4 py-3">Overweight</td><td class="px-4 py-3">25 – 29.9</td></tr>
+          <tr><td class="px-4 py-3">Obese Class I</td><td class="px-4 py-3">30 – 34.9</td></tr>
+          <tr><td class="px-4 py-3">Obese Class II</td><td class="px-4 py-3">35 – 39.9</td></tr>
+          <tr><td class="px-4 py-3">Obese Class III</td><td class="px-4 py-3">≥ 40</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</BaseLayout>

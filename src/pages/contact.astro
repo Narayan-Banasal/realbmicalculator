@@ -1,0 +1,24 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ProsePage from '../components/ProsePage.astro';
+---
+
+<BaseLayout
+  title="Contact"
+  description="Contact Real BMI Calculator for feedback, corrections, or partnership inquiries."
+>
+  <ProsePage title="Contact us" lead="We read feedback about accuracy, accessibility, and new features.">
+    <p>
+      For general inquiries about Real BMI Calculator, email us at
+      <a href="mailto:hello@realbmicalculator.com" class="text-(--color-link) hover:underline">hello@realbmicalculator.com</a>
+      (replace with your live address before launch).
+    </p>
+    <p>
+      We do not provide personal medical advice by email. For health concerns, please contact a licensed
+      provider in your area.
+    </p>
+    <p>
+      <a href="/" class="text-(--color-link) hover:underline">← Back to BMI Calculator</a>
+    </p>
+  </ProsePage>
+</BaseLayout>

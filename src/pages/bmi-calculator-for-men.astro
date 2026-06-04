@@ -1,0 +1,24 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import BmiCalculator from '../components/BmiCalculator.astro';
+---
+
+<BaseLayout
+  title="BMI Calculator for Men"
+  description="BMI calculator for men — instant body mass index with athletic and health context."
+>
+  <div class="mx-auto max-w-6xl px-4 py-10 sm:px-6">
+    <h1 class="font-display text-4xl font-bold text-(--color-ink)">BMI Calculator for Men</h1>
+    <p class="mt-4 max-w-2xl text-(--color-body)">
+      Men with significant muscle mass may register as overweight on BMI despite low body fat. This
+      calculator uses the standard adult formula; pair your result with waist measurement and professional
+      guidance when training or managing weight.
+    </p>
+    <div class="mt-10 max-w-xl">
+      <BmiCalculator />
+    </div>
+    <p class="mt-8 text-sm text-(--color-body)">
+      <a href="/" class="text-(--color-link) hover:underline">← Main BMI calculator</a>
+    </p>
+  </div>
+</BaseLayout>

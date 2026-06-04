@@ -1,0 +1,288 @@
+---
+---
+
+<section
+  id="bmi-calculator"
+  class="rounded-2xl border border-(--color-hairline) bg-(--color-surface) p-5 shadow-sm sm:p-8"
+  aria-labelledby="calc-heading"
+>
+  <h2 id="calc-heading" class="font-display text-xl font-semibold text-(--color-ink) sm:text-2xl">
+    Calculate your BMI
+  </h2>
+  <p class="mt-1 text-sm text-(--color-body)">Instant results · US & metric units</p>
+
+  <div class="mt-6 flex gap-2" role="group" aria-label="Unit system">
+    <button
+      type="button"
+      data-units="metric"
+      class="unit-btn rounded-lg border px-4 py-2 text-sm font-medium transition"
+    >
+      Metric (kg, cm)
+    </button>
+    <button
+      type="button"
+      data-units="us"
+      class="unit-btn rounded-lg border px-4 py-2 text-sm font-medium transition"
+    >
+      US (lb, ft/in)
+    </button>
+  </div>
+
+  <div class="mt-6 grid gap-4 sm:grid-cols-2">
+    <label class="block">
+      <span class="text-sm font-medium text-(--color-body)">Age (optional)</span>
+      <input
+        type="number"
+        id="age"
+        min="2"
+        max="120"
+        placeholder="25"
+        class="mt-1 w-full rounded-xl border border-(--color-hairline) bg-(--color-canvas) px-4 py-3 text-(--color-ink) outline-none focus:border-(--color-accent) focus:ring-2 focus:ring-(--color-accent)/20"
+      />
+    </label>
+    <fieldset class="block">
+      <legend class="text-sm font-medium text-(--color-body)">Gender (optional)</legend>
+      <div class="mt-2 flex gap-2">
+        <label class="flex flex-1 cursor-pointer items-center justify-center rounded-xl border border-(--color-hairline) px-3 py-3 has-checked:border-(--color-accent) has-checked:bg-(--color-accent)/10">
+          <input type="radio" name="gender" value="female" class="sr-only" />
+          <span class="text-sm">Female</span>
+        </label>
+        <label class="flex flex-1 cursor-pointer items-center justify-center rounded-xl border border-(--color-hairline) px-3 py-3 has-checked:border-(--color-accent) has-checked:bg-(--color-accent)/10">
+          <input type="radio" name="gender" value="male" class="sr-only" checked />
+          <span class="text-sm">Male</span>
+        </label>
+      </div>
+    </fieldset>
+  </div>
+
+  <div id="height-metric" class="mt-4 grid gap-4 sm:grid-cols-2">
+    <label class="block sm:col-span-2">
+      <span class="text-sm font-medium text-(--color-body)">Height (cm)</span>
+      <input
+        type="number"
+        id="height-cm"
+        min="50"
+        max="280"
+        placeholder="170"
+        class="mt-1 w-full rounded-xl border border-(--color-hairline) bg-(--color-canvas) px-4 py-3 text-lg outline-none focus:border-(--color-accent)"
+      />
+    </label>
+    <label class="block sm:col-span-2">
+      <span class="text-sm font-medium text-(--color-body)">Weight (kg)</span>
+      <input
+        type="number"
+        id="weight-kg"
+        min="20"
+        max="500"
+        step="0.1"
+        placeholder="70"
+        class="mt-1 w-full rounded-xl border border-(--color-hairline) bg-(--color-canvas) px-4 py-3 text-lg outline-none focus:border-(--color-accent)"
+      />
+    </label>
+  </div>
+
+  <div id="height-us" class="mt-4 hidden grid gap-4 sm:grid-cols-3">
+    <label class="block">
+      <span class="text-sm font-medium text-(--color-body)">Feet</span>
+      <input
+        type="number"
+        id="height-ft"
+        min="3"
+        max="8"
+        placeholder="5"
+        class="mt-1 w-full rounded-xl border border-(--color-hairline) bg-(--color-canvas) px-4 py-3 text-lg outline-none focus:border-(--color-accent)"
+      />
+    </label>
+    <label class="block">
+      <span class="text-sm font-medium text-(--color-body)">Inches</span>
+      <input
+        type="number"
+        id="height-in"
+        min="0"
+        max="11"
+        placeholder="10"
+        class="mt-1 w-full rounded-xl border border-(--color-hairline) bg-(--color-canvas) px-4 py-3 text-lg outline-none focus:border-(--color-accent)"
+      />
+    </label>
+    <label class="block sm:col-span-1">
+      <span class="text-sm font-medium text-(--color-body)">Weight (lb)</span>
+      <input
+        type="number"
+        id="weight-lb"
+        min="44"
+        max="1100"
+        step="0.1"
+        placeholder="160"
+        class="mt-1 w-full rounded-xl border border-(--color-hairline) bg-(--color-canvas) px-4 py-3 text-lg outline-none focus:border-(--color-accent)"
+      />
+    </label>
+  </div>
+
+  <div id="result-panel" class="mt-8 hidden">
+    <div class="flex flex-wrap items-end justify-between gap-4">
+      <div>
+        <p class="text-sm uppercase tracking-wide text-(--color-mute)">Your BMI</p>
+        <p id="bmi-value" class="font-display text-5xl font-bold tabular-nums text-(--color-ink)">—</p>
+      </div>
+      <span
+        id="bmi-category"
+        class="rounded-full px-4 py-1.5 text-sm font-semibold text-white"
+      ></span>
+    </div>
+
+    <div class="relative mt-6 h-3 overflow-hidden rounded-full bg-(--color-hairline)">
+      <div class="absolute inset-0 flex">
+        <div class="h-full w-[18.5%] bg-(--color-under)"></div>
+        <div class="h-full w-[6.4%] bg-(--color-normal)"></div>
+        <div class="h-full w-[5%] bg-(--color-over)"></div>
+        <div class="h-full flex-1 bg-(--color-obese)"></div>
+      </div>
+      <div
+        id="bmi-marker"
+        class="absolute top-1/2 h-5 w-5 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-white bg-(--color-ink) shadow-md transition-all duration-300"
+        style="left: 0%"
+      ></div>
+    </div>
+    <div class="mt-2 flex justify-between text-[10px] text-(--color-mute) sm:text-xs">
+      <span>16</span><span>18.5</span><span>25</span><span>30</span><span>40+</span>
+    </div>
+
+    <ul id="result-details" class="mt-6 space-y-2 text-sm text-(--color-body)"></ul>
+    <button
+      type="button"
+      id="copy-result"
+      class="mt-4 text-sm font-medium text-(--color-link) hover:underline"
+    >
+      Copy result link
+    </button>
+  </div>
+</section>
+
+<script>
+  const STORAGE_UNITS = 'rbmi-units';
+  let units: 'metric' | 'us' = (localStorage.getItem(STORAGE_UNITS) as 'metric' | 'us') || 'metric';
+
+  const els = {
+    metric: document.getElementById('height-metric')!,
+    us: document.getElementById('height-us')!,
+    panel: document.getElementById('result-panel')!,
+    value: document.getElementById('bmi-value')!,
+    category: document.getElementById('bmi-category')!,
+    marker: document.getElementById('bmi-marker')!,
+    details: document.getElementById('result-details')!,
+    unitBtns: document.querySelectorAll<HTMLButtonElement>('.unit-btn'),
+  };
+
+  function categorize(bmi: number) {
+    if (bmi < 18.5) return { label: 'Underweight', color: 'var(--color-under)' };
+    if (bmi < 25) return { label: 'Normal weight', color: 'var(--color-normal)' };
+    if (bmi < 30) return { label: 'Overweight', color: 'var(--color-over)' };
+    return { label: 'Obese', color: 'var(--color-obese)' };
+  }
+
+  function markerPos(bmi: number) {
+    const min = 15;
+    const max = 40;
+    const p = Math.min(100, Math.max(0, ((bmi - min) / (max - min)) * 100));
+    return p;
+  }
+
+  function healthyRangeKg(hM: number) {
+    const lo = 18.5 * hM * hM;
+    const hi = 24.9 * hM * hM;
+    return { lo, hi };
+  }
+
+  function calc() {
+    let bmi: number | null = null;
+    let hM = 0;
+
+    if (units === 'metric') {
+      const cm = parseFloat((document.getElementById('height-cm') as HTMLInputElement).value);
+      const kg = parseFloat((document.getElementById('weight-kg') as HTMLInputElement).value);
+      if (cm > 0 && kg > 0) {
+        hM = cm / 100;
+        bmi = kg / (hM * hM);
+      }
+    } else {
+      const ft = parseFloat((document.getElementById('height-ft') as HTMLInputElement).value) || 0;
+      const inch = parseFloat((document.getElementById('height-in') as HTMLInputElement).value) || 0;
+      const lb = parseFloat((document.getElementById('weight-lb') as HTMLInputElement).value);
+      const totalIn = ft * 12 + inch;
+      if (totalIn > 0 && lb > 0) {
+        bmi = (703 * lb) / (totalIn * totalIn);
+        hM = totalIn * 0.0254;
+      }
+    }
+
+    if (bmi == null || !isFinite(bmi)) {
+      els.panel.classList.add('hidden');
+      return;
+    }
+
+    const cat = categorize(bmi);
+    els.panel.classList.remove('hidden');
+    els.value.textContent = bmi.toFixed(1);
+    els.category.textContent = cat.label;
+    els.category.style.backgroundColor = cat.color;
+    els.marker.style.left = `${markerPos(bmi)}%`;
+
+    const range = healthyRangeKg(hM);
+    const prime = (bmi / 25).toFixed(2);
+    const lines = [
+      `Healthy BMI range: 18.5 – 24.9 kg/m²`,
+      units === 'metric'
+        ? `Healthy weight for your height: ${range.lo.toFixed(1)} – ${range.hi.toFixed(1)} kg`
+        : `Healthy weight for your height: ${(range.lo * 2.205).toFixed(1)} – ${(range.hi * 2.205).toFixed(1)} lb`,
+      `BMI Prime: ${prime}`,
+    ];
+    els.details.innerHTML = lines.map((t) => `<li>${t}</li>`).join('');
+  }
+
+  function setUnits(u: 'metric' | 'us') {
+    units = u;
+    localStorage.setItem(STORAGE_UNITS, u);
+    els.metric.classList.toggle('hidden', u !== 'metric');
+    els.us.classList.toggle('hidden', u !== 'us');
+    els.unitBtns.forEach((btn) => {
+      const active = btn.dataset.units === u;
+      btn.classList.toggle('border-(--color-accent)', active);
+      btn.classList.toggle('bg-(--color-accent)/10', active);
+      btn.classList.toggle('text-(--color-ink)', active);
+      btn.classList.toggle('border-(--color-hairline)', !active);
+    });
+    calc();
+  }
+
+  els.unitBtns.forEach((btn) => {
+    btn.addEventListener('click', () => setUnits(btn.dataset.units as 'metric' | 'us'));
+  });
+
+  document.querySelectorAll('#bmi-calculator input').forEach((input) => {
+    input.addEventListener('input', calc);
+  });
+
+  document.getElementById('copy-result')?.addEventListener('click', async () => {
+    const params = new URLSearchParams({ units });
+    if (units === 'metric') {
+      params.set('cm', (document.getElementById('height-cm') as HTMLInputElement).value);
+      params.set('kg', (document.getElementById('weight-kg') as HTMLInputElement).value);
+    } else {
+      params.set('ft', (document.getElementById('height-ft') as HTMLInputElement).value);
+      params.set('in', (document.getElementById('height-in') as HTMLInputElement).value);
+      params.set('lb', (document.getElementById('weight-lb') as HTMLInputElement).value);
+    }
+    const url = `${location.origin}${location.pathname}?${params}`;
+    await navigator.clipboard.writeText(url);
+  });
+
+  const p = new URLSearchParams(location.search);
+  if (p.get('units') === 'us') setUnits('us');
+  else setUnits('metric');
+  if (p.get('cm')) (document.getElementById('height-cm') as HTMLInputElement).value = p.get('cm')!;
+  if (p.get('kg')) (document.getElementById('weight-kg') as HTMLInputElement).value = p.get('kg')!;
+  if (p.get('ft')) (document.getElementById('height-ft') as HTMLInputElement).value = p.get('ft')!;
+  if (p.get('in')) (document.getElementById('height-in') as HTMLInputElement).value = p.get('in')!;
+  if (p.get('lb')) (document.getElementById('weight-lb') as HTMLInputElement).value = p.get('lb')!;
+  calc();
+</script>

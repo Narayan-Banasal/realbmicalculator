@@ -1,0 +1,6 @@
+# Video fix: noindex Cloudflare *.pages.dev preview URL (update host after first deploy)
+https://realbmicalculator.pages.dev/*
+  X-Robots-Tag: noindex
+
+https://:project.pages.dev/*
+  X-Robots-Tag: noindex

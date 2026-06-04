@@ -1,0 +1,39 @@
+---
+import { faqItems } from '../data/faq';
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqItems.map((item) => ({
+    '@type': 'Question',
+    name: item.question,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: item.answer,
+    },
+  })),
+};
+---
+
+<section id="faq" class="scroll-mt-24" aria-labelledby="faq-heading">
+  <h2 id="faq-heading" class="font-display text-2xl font-semibold text-(--color-ink)">
+    Frequently asked questions
+  </h2>
+  <div class="mt-6 space-y-3">
+    {faqItems.map((item, i) => (
+      <details
+        class="group rounded-xl border border-(--color-hairline) bg-(--color-surface) px-4 py-3 open:shadow-sm"
+        open={i === 0}
+      >
+        <summary class="cursor-pointer list-none font-medium text-(--color-ink) marker:content-none">
+          <span class="flex items-center justify-between gap-2">
+            {item.question}
+            <span class="text-(--color-mute) transition group-open:rotate-45">+</span>
+          </span>
+        </summary>
+        <p class="mt-3 text-sm leading-relaxed text-(--color-body)">{item.answer}</p>
+      </details>
+    ))}
+  </div>
+  <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+</section>

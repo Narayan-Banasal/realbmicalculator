@@ -1,0 +1,31 @@
+{
+  "name": "realbmicalculator",
+  "type": "module",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Real BMI Calculator — free body mass index tool for realbmicalculator.com",
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro",
+    "check": "astro check",
+    "generate-types": "wrangler types",
+    "deploy": "astro build && wrangler deploy",
+    "deploy:pages": "astro build && wrangler pages deploy dist --project-name=realbmicalculator"
+  },
+  "dependencies": {
+    "@astrojs/cloudflare": "^13.6.1",
+    "@astrojs/sitemap": "^3.7.3",
+    "@tailwindcss/vite": "^4.3.0",
+    "astro": "^6.4.4",
+    "tailwindcss": "^4.3.0",
+    "wrangler": "^4.98.0"
+  },
+  "overrides": {
+    "vite": "^7"
+  }
+}

@@ -1,0 +1,31 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ProsePage from '../components/ProsePage.astro';
+---
+
+<BaseLayout
+  title="Privacy Policy"
+  description="Privacy Policy for Real BMI Calculator — how we handle cookies, analytics, and your data."
+>
+  <ProsePage title="Privacy Policy" lead="Last updated: June 2026">
+    <p>
+      Real BMI Calculator (“we”, “our”, “the site”) respects your privacy. This policy explains what
+      information we collect when you use realbmicalculator.com.
+    </p>
+    <h2 class="font-display text-xl font-semibold text-(--color-ink)">Information we collect</h2>
+    <p>
+      BMI inputs are processed in your browser. We do not require an account. If you enable Google Analytics
+      (optional site configuration), anonymous usage data such as pages visited and device type may be
+      collected by Google according to their policy.
+    </p>
+    <h2 class="font-display text-xl font-semibold text-(--color-ink)">Cookies</h2>
+    <p>
+      We use local storage for theme preference (light/dark) and unit preference. Third-party ad or analytics
+      partners may set cookies after you consent where required by law.
+    </p>
+    <h2 class="font-display text-xl font-semibold text-(--color-ink)">Contact</h2>
+    <p>
+      Privacy questions: <a href="/contact" class="text-(--color-link)">Contact page</a>.
+    </p>
+  </ProsePage>
+</BaseLayout>

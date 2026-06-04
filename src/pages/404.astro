@@ -1,0 +1,21 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Page not found"
+  description="The page you requested could not be found on Real BMI Calculator."
+  noindex={true}
+>
+  <div class="mx-auto max-w-lg px-4 py-24 text-center">
+    <p class="text-6xl font-bold text-(--color-mute)">404</p>
+    <h1 class="font-display mt-4 text-2xl font-semibold text-(--color-ink)">Page not found</h1>
+    <p class="mt-2 text-(--color-body)">That URL does not exist. Try our BMI calculator instead.</p>
+    <a
+      href="/"
+      class="mt-8 inline-block rounded-xl bg-(--color-accent) px-6 py-3 font-medium text-white hover:bg-(--color-accent-deep)"
+    >
+      Back to BMI Calculator
+    </a>
+  </div>
+</BaseLayout>

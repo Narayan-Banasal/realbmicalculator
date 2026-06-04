@@ -1,0 +1,100 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import BmiCalculator from '../components/BmiCalculator.astro';
+import FaqSection from '../components/FaqSection.astro';
+
+const title = 'BMI Calculator — Free Body Mass Index Tool';
+const description =
+  'Free BMI calculator for adults. Instantly calculate body mass index in kg/cm or lb/ft-in. See your category, healthy weight range, and BMI chart. Real BMI Calculator.';
+---
+
+<BaseLayout title={title} description={description}>
+  <div class="mx-auto max-w-6xl px-4 py-10 sm:px-6 sm:py-14">
+    <section class="mb-10 max-w-3xl">
+      <p class="text-sm font-medium uppercase tracking-wider text-(--color-accent-deep)">
+        realbmicalculator.com
+      </p>
+      <h1 class="font-display mt-2 text-4xl font-bold tracking-tight text-(--color-ink) sm:text-5xl">
+        BMI Calculator
+      </h1>
+      <p class="mt-4 text-lg leading-relaxed text-(--color-body)">
+        Calculate your body mass index in seconds. Our free online BMI calculator supports metric and US
+        units, shows your category on a visual scale, and explains what your number means for your health.
+      </p>
+      <nav class="mt-6 flex flex-wrap gap-3 text-sm" aria-label="Legal and info (visible for AdSense)">
+        <a href="/privacy-policy" class="rounded-lg bg-(--color-canvas) px-3 py-1.5 text-(--color-link) ring-1 ring-(--color-hairline)">Privacy Policy</a>
+        <a href="/terms" class="rounded-lg bg-(--color-canvas) px-3 py-1.5 text-(--color-link) ring-1 ring-(--color-hairline)">Terms</a>
+        <a href="/about" class="rounded-lg bg-(--color-canvas) px-3 py-1.5 text-(--color-link) ring-1 ring-(--color-hairline)">About Us</a>
+        <a href="/contact" class="rounded-lg bg-(--color-canvas) px-3 py-1.5 text-(--color-link) ring-1 ring-(--color-hairline)">Contact</a>
+      </nav>
+    </section>
+
+    <div class="grid gap-10 lg:grid-cols-[1fr_1.1fr] lg:gap-12">
+      <BmiCalculator />
+      <aside class="space-y-6 text-sm leading-relaxed text-(--color-body)">
+        <div class="rounded-xl border border-(--color-hairline) bg-(--color-accent)/5 p-5">
+          <h2 class="font-semibold text-(--color-ink)">Quick BMI categories (adults)</h2>
+          <table class="mt-3 w-full text-left text-sm">
+            <thead>
+              <tr class="border-b border-(--color-hairline) text-(--color-mute)">
+                <th class="py-2 pr-2">Category</th>
+                <th class="py-2">BMI (kg/m²)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="border-b border-(--color-hairline)/60"><td class="py-2">Underweight</td><td>&lt; 18.5</td></tr>
+              <tr class="border-b border-(--color-hairline)/60"><td class="py-2">Normal</td><td>18.5 – 24.9</td></tr>
+              <tr class="border-b border-(--color-hairline)/60"><td class="py-2">Overweight</td><td>25 – 29.9</td></tr>
+              <tr><td class="py-2">Obese</td><td>≥ 30</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>
+          <strong class="text-(--color-ink)">Medical disclaimer:</strong> This tool is not a substitute for
+          professional medical advice, diagnosis, or treatment. BMI is a screening measure and does not
+          measure body fat directly.
+        </p>
+      </aside>
+    </div>
+
+    <article class="prose-section mx-auto mt-16 max-w-3xl space-y-6 text-(--color-body)">
+      <h2 class="font-display text-2xl font-semibold text-(--color-ink)">What is BMI?</h2>
+      <p>
+        Body mass index (BMI) is a simple calculation using a person's height and weight. Healthcare
+        organizations including the WHO and CDC use BMI categories to screen for weight-related health
+        risks at the population level. It is quick, inexpensive, and useful as a first step—but it has
+        limitations you should understand before drawing conclusions about your personal health.
+      </p>
+      <h2 class="font-display text-2xl font-semibold text-(--color-ink)">How to use this BMI calculator</h2>
+      <p>
+        Choose metric (kilograms and centimeters) or US customary units (pounds, feet, and inches). Enter
+        your height and weight; your BMI updates automatically. You will see your BMI value, category
+        (underweight, normal, overweight, or obese), a color scale, healthy weight range for your height,
+        and BMI Prime. Optional age and gender fields help personalize your session but do not change the
+        standard adult formula.
+      </p>
+      <h2 class="font-display text-2xl font-semibold text-(--color-ink)">Limitations of BMI</h2>
+      <p>
+        Athletes with high muscle mass may have a high BMI despite low body fat. Older adults may have a
+        normal BMI but elevated fat mass. BMI also does not reflect fat distribution (abdominal fat carries
+        higher metabolic risk). Pregnant women and children require different assessment methods. If your
+        BMI is outside the normal range, consider speaking with a doctor who can evaluate blood work,
+        waist circumference, lifestyle, and family history.
+      </p>
+      <h2 class="font-display text-2xl font-semibold text-(--color-ink)">Why Real BMI Calculator?</h2>
+      <p>
+        We built Real BMI Calculator to be faster and clearer than cluttered calculator pages: instant
+        results, dark mode, mobile-friendly layout, and honest educational content. Whether you are tracking
+        fitness progress or learning about body mass index for the first time, you get a focused tool without
+        sign-up walls. Explore our <a href="/bmi-chart" class="text-(--color-link) hover:underline">BMI chart</a>,
+        <a href="/bmi-calculator-for-women" class="text-(--color-link) hover:underline">BMI for women</a>, and
+        <a href="/bmi-calculator-for-men" class="text-(--color-link) hover:underline">BMI for men</a> pages for
+        more context.
+      </p>
+    </article>
+
+    <div class="mx-auto mt-16 max-w-3xl">
+      <FaqSection />
+    </div>
+  </div>
+</BaseLayout>
