@@ -1,8 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import BmiCalculator from '../components/BmiCalculator.astro';
-import BmiVisualGallery from '../components/BmiVisualGallery.astro';
-import BmiScene3d from '../components/BmiScene3d.astro';
 import FaqSection from '../components/FaqSection.astro';
 
 const title = 'BMI Calculator — Free Body Mass Index Tool';
@@ -21,8 +19,7 @@ const description =
       </h1>
       <p class="mt-4 text-lg leading-relaxed text-(--color-body)">
         Calculate your body mass index in seconds. Drag sliders or type exact values, switch kg ↔ lb instantly,
-        watch your personal body model react live to every change, see instant category + gauge, and get a clear
-        health alert with tailored action steps when BMI crosses thresholds. Real value, not just a number.
+        see your 3D body model update live, category, gauge, and health alert.
       </p>
       <nav class="mt-6 flex flex-wrap gap-3 text-sm" aria-label="Legal and info (visible for AdSense)">
         <a href="/privacy-policy" class="rounded-lg bg-(--color-canvas) px-3 py-1.5 text-(--color-link) ring-1 ring-(--color-hairline)">Privacy Policy</a>
@@ -61,9 +58,6 @@ const description =
     </div>
   </div>
 
-  <BmiVisualGallery />
-  <BmiScene3d />
-
   <div class="mx-auto max-w-6xl px-4 sm:px-6">
 
     <article class="prose-section mx-auto mt-16 max-w-3xl space-y-6 text-(--color-body)">
@@ -78,9 +72,7 @@ const description =
       <p>
         Use the unit switch for metric (kg, cm) or US (lb, ft/in) — values convert automatically. Sliders give
         quick exploration; number fields and ± buttons allow precise adjustments (0.5 kg or 1 lb steps). Your
-        BMI updates instantly with category color, healthy weight range, BMI Prime, and a live body model that
-        reacts to every change (shape, tilt, color, expression). Get a health alert + personalized action plan
-        when results fall outside safe ranges.
+        BMI updates instantly with category color, healthy weight range, and live 3D body model.
       </p>
       <h2 class="font-display text-2xl font-semibold text-(--color-ink)">Limitations of BMI</h2>
       <p>

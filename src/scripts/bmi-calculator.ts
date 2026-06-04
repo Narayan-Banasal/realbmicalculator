@@ -52,7 +52,11 @@ export function initBmiCalculator() {
     alertOverlay: document.getElementById('bmi-alert-overlay')!,
     sceneCards: document.querySelectorAll<HTMLElement>('[data-scene-card]'),
     galleryCards: document.querySelectorAll<HTMLElement>('[data-gallery-card]'),
-    bodyViz: document.getElementById('body-viz') as HTMLCanvasElement | null,
+    bodyModelContainer: document.getElementById('body-model-container')!,
+    bodyModelInner: document.getElementById('body-model-inner')!,
+    bodyModel: document.getElementById('body-model') as HTMLImageElement,
+    modelAlarm: document.getElementById('model-alarm')!,
+    bodyStatus: document.getElementById('body-status')!,
     recsPanel: document.getElementById('recs-panel')!,
     recsContent: document.getElementById('recs-content')!,
   };
@@ -70,12 +74,14 @@ export function initBmiCalculator() {
   function bindSlider(range: HTMLInputElement, number: HTMLInputElement, decimals = 0) {
     range.addEventListener('input', () => {
       syncPair(range, number, decimals);
-      updateLiveModel();
+      clearTimeout(alertTimeout); // keep adjusting, delay any alert
+      updateLiveViz();
       calc();
     });
     number.addEventListener('input', () => {
       syncFromNumber(range, number);
-      updateLiveModel();
+      clearTimeout(alertTimeout);
+      updateLiveViz();
       calc();
     });
   }
@@ -102,14 +108,14 @@ export function initBmiCalculator() {
   root.querySelectorAll<HTMLButtonElement>('[data-nudge]').forEach((btn) => {
     btn.addEventListener('click', () => {
       nudge(btn.dataset.nudge!, parseFloat(btn.dataset.delta!));
-      updateLiveModel();
+      clearTimeout(alertTimeout);
+      updateLiveViz();
     });
   });
 
   const presets: Record<string, { cm: number; kg: number; ft: number; inch: number; lb: number }> = {
     average: { cm: 170, kg: 70, ft: 5, inch: 10, lb: 160 },
     athlete: { cm: 178, kg: 82, ft: 5, inch: 10, lb: 181 },
-    high: { cm: 165, kg: 95, ft: 5, inch: 5, lb: 209 },
   };
 
   root.querySelectorAll<HTMLButtonElement>('[data-preset]').forEach((btn) => {
@@ -128,7 +134,8 @@ export function initBmiCalculator() {
       els.heightInRange.value = String(p.inch);
       els.weightLb.value = String(p.lb);
       els.weightLbRange.value = String(p.lb);
-      updateLiveModel();
+      clearTimeout(alertTimeout);
+      updateLiveViz();
       calc();
     });
   });
@@ -140,7 +147,7 @@ export function initBmiCalculator() {
   });
   document.querySelectorAll('input[name="gender"]').forEach((r) => {
     r.addEventListener('change', () => {
-      updateLiveModel(); // live 3D gender proportion change
+      updateLiveViz(); // live 3D gender proportion change
       if (!els.resultPanel.classList.contains('hidden')) calc();
     });
   });
@@ -179,7 +186,8 @@ export function initBmiCalculator() {
     els.unitToggle.setAttribute('aria-checked', u === 'us' ? 'true' : 'false');
     els.unitToggle.dataset.units = u;
     document.dispatchEvent(new CustomEvent('rbmi:units', { detail: { units: u } }));
-    updateLiveModel();
+    clearTimeout(alertTimeout);
+    updateLiveViz();
     calc();
   }
 
@@ -324,7 +332,8 @@ export function initBmiCalculator() {
       els.alertBanner.classList.add('hidden');
       els.alertOverlay.classList.add('hidden');
       if (els.recsPanel) els.recsPanel.classList.add('hidden');
-      updateLiveModel();
+      clearTimeout(alertTimeout);
+      updateLiveViz();
       return;
     }
 
@@ -335,8 +344,6 @@ export function initBmiCalculator() {
     els.bmiCategory.textContent = cat.label;
     els.bmiCategory.style.backgroundColor = cat.color;
     els.bmiMarker.style.left = `${markerPosition(bmi)}%`;
-
-    updateLiveModel(); // ensure live even on full calc
 
     const range = healthyWeightRangeKg(heightM);
     const prime = (bmi / 25).toFixed(2);
@@ -351,9 +358,20 @@ export function initBmiCalculator() {
     els.resultDetails.innerHTML = lines.map((t) => `<li>${t}</li>`).join('');
 
     highlightVisuals(cat.id, cat.label);
-    applyAlert(bmi);
+    updateLiveViz();
+    // debounce alert: do not show red screen/dismiss while user is actively adjusting (prevents taking control)
+    clearTimeout(alertTimeout);
+    const level = shouldTriggerAlert(bmi);
+    if (level) {
+      alertTimeout = setTimeout(() => {
+        applyAlert(bmi);
+      }, 650);
+    } else {
+      document.body.classList.remove('bmi-alert-caution', 'bmi-alert-critical');
+      els.alertBanner.classList.add('hidden');
+      els.alertOverlay.classList.add('hidden');
+    }
     updateRecs(bmi, cat, heightM);
-    updateLiveModel(); // keep 3D model in sync with final result + gender
   }
 
   document.getElementById('dismiss-alert')?.addEventListener('click', () => {
@@ -400,204 +418,101 @@ export function initBmiCalculator() {
     els.weightLbRange.value = p.get('lb')!;
   }
 
-  // === Three.js 3D model init and update (real 3D, interactive rotate, gender specific, live update without resetting view/rotation) ===
-  // This replaces the previous 2D canvas. The model is a stylized but person-like 3D figure.
-  // Drag the canvas to rotate (preserves rotation across live updates - fixes the "pointer jumps to lowest/reset view" issue).
-  // Updates on input changes for height/weight (fat/scale), gender (different body composition).
-  // Color by BMI category for alarming (red for bad).
-  let threeRenderer: THREE.WebGLRenderer | null = null;
-  let threeScene: THREE.Scene | null = null;
-  let threeCamera: THREE.PerspectiveCamera | null = null;
-  let bodyGroup: THREE.Group | null = null;
-  let torso: THREE.Mesh | null = null;
-  let head: THREE.Mesh | null = null;
-  let lArm: THREE.Mesh | null = null;
-  let rArm: THREE.Mesh | null = null;
-  let lLeg: THREE.Mesh | null = null;
-  let rLeg: THREE.Mesh | null = null;
-  let rotY = 0.3;
-  let rotX = 0.15;
-  let dragging = false;
-  let lastX = 0;
-  let lastY = 0;
+  // Body images (generated realistic dummies for real person look, gender specific)
+  const bodyImages = {
+    'male-underweight': '/images/bodies/2.jpg',
+    'male-normal': '/images/bodies/1.jpg',
+    'male-overweight': '/images/bodies/4.jpg',
+    'male-obese': '/images/bodies/3.jpg',
+    'female-underweight': '/images/bodies/5.jpg',
+    'female-normal': '/images/bodies/6.jpg',
+    'female-overweight': '/images/bodies/8.jpg',
+    'female-obese': '/images/bodies/7.jpg',
+  };
 
-  function initThree(canvas: HTMLCanvasElement) {
-    if (threeRenderer) return;
-    threeRenderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
-    threeRenderer.setSize(canvas.clientWidth || 320, canvas.clientHeight || 320);
-    threeScene = new THREE.Scene();
-    threeCamera = new THREE.PerspectiveCamera(50, 1, 0.1, 100);
-    threeCamera.position.set(0, 1.1, 2.8);
+  let modelRotY = 0;
+  let alertTimeout = null;
 
-    const hemi = new THREE.HemisphereLight(0xffffff, 0x444466, 1.0);
-    threeScene.add(hemi);
-    const dir = new THREE.DirectionalLight(0xffffff, 0.7);
-    dir.position.set(2, 3, 1);
-    threeScene.add(dir);
-
-    bodyGroup = new THREE.Group();
-    threeScene.add(bodyGroup);
-
-    const skin = new THREE.MeshPhongMaterial({ color: 0xdeb887, shininess: 8 });
-    const clothes = new THREE.MeshPhongMaterial({ color: 0x334155, shininess: 2 });
-
-    // Head
-    head = new THREE.Mesh(new THREE.SphereGeometry(0.18, 20, 20), skin);
-    head.position.y = 1.65;
-    bodyGroup.add(head);
-
-    // Torso (will be scaled for gender/BMI)
-    torso = new THREE.Mesh(new THREE.CylinderGeometry(0.15, 0.18, 0.55, 18), clothes);
-    torso.position.y = 1.25;
-    bodyGroup.add(torso);
-
-    // Arms
-    const armG = new THREE.CylinderGeometry(0.05, 0.055, 0.48, 10);
-    lArm = new THREE.Mesh(armG, skin);
-    lArm.position.set(-0.28, 1.42, 0);
-    lArm.rotation.z = 0.5;
-    bodyGroup.add(lArm);
-    rArm = new THREE.Mesh(armG, skin);
-    rArm.position.set(0.28, 1.42, 0);
-    rArm.rotation.z = -0.5;
-    bodyGroup.add(rArm);
-
-    // Legs
-    const legG = new THREE.CylinderGeometry(0.065, 0.07, 0.6, 10);
-    lLeg = new THREE.Mesh(legG, clothes);
-    lLeg.position.set(-0.12, 0.85, 0);
-    bodyGroup.add(lLeg);
-    rLeg = new THREE.Mesh(legG, clothes);
-    rLeg.position.set(0.12, 0.85, 0);
-    bodyGroup.add(rLeg);
-
-    // Floor
-    const floor = new THREE.Mesh(new THREE.PlaneGeometry(1.8, 1.8), new THREE.MeshPhongMaterial({ color: 0xddd, shininess: 0 }));
-    floor.rotation.x = -Math.PI * 0.5;
-    floor.position.y = 0.52;
-    threeScene.add(floor);
-
-    // Mouse drag rotate (left/right primarily)
-    canvas.addEventListener('pointerdown', (e) => {
-      dragging = true;
-      lastX = e.clientX;
-      lastY = e.clientY;
-      canvas.setPointerCapture(e.pointerId);
-    });
-    canvas.addEventListener('pointerup', (e) => {
-      dragging = false;
-      canvas.releasePointerCapture(e.pointerId);
-    });
-    canvas.addEventListener('pointermove', (e) => {
-      if (!dragging || !bodyGroup) return;
-      const dx = e.clientX - lastX;
-      const dy = e.clientY - lastY;
-      rotY += dx * 0.0045;
-      rotX = Math.max(-0.6, Math.min(0.7, rotX - dy * 0.003));
-      bodyGroup.rotation.y = rotY;
-      bodyGroup.rotation.x = rotX;
-      lastX = e.clientX;
-      lastY = e.clientY;
-    });
-    canvas.addEventListener('dblclick', () => {
-      if (bodyGroup) {
-        rotY = 0.3;
-        rotX = 0.15;
-        bodyGroup.rotation.set(rotX, rotY, 0);
-      }
-    });
-    canvas.style.cursor = 'grab';
-
-    // Render loop
-    function loop() {
-      requestAnimationFrame(loop);
-      if (threeRenderer && threeScene && threeCamera) threeRenderer.render(threeScene, threeCamera);
-    }
-    loop();
-
-    // Resize
-    const onR = () => {
-      if (!threeCamera || !threeRenderer) return;
-      const w = canvas.clientWidth, h = canvas.clientHeight || 320;
-      threeCamera.aspect = w / h;
-      threeCamera.updateProjectionMatrix();
-      threeRenderer.setSize(w, h);
-    };
-    window.addEventListener('resize', onR);
-    setTimeout(onR, 80);
-
-    bodyGroup.rotation.set(rotX, rotY, 0);
-  }
-
-  function updateThreeModel(bmi: number, hCm: number, gender: 'male' | 'female') {
-    if (!bodyGroup || !torso || !head || !lArm || !rArm || !lLeg || !rLeg) return;
-
-    const fat = Math.max(0.55, Math.min(1.65, (bmi - 16) / 11));
-    const hS = Math.max(0.78, Math.min(1.22, hCm / 170));
-
-    // Gender specific proportions (composition changes)
-    const male = gender === 'male';
-    const sh = male ? 1.22 : 0.88; // shoulder
-    const hp = male ? 0.88 : 1.22; // hip
-
-    // Torso girth and shape from BMI + gender
-    const r = 0.155 * (0.75 + fat * 0.55);
-    torso.scale.set(sh * (0.75 + (fat - 0.6) * 0.4), hS, hp * (0.75 + (fat - 0.6) * 0.4));
-    torso.position.y = 1.25 * hS;
-
-    // Head
-    head.scale.setScalar(hS);
-    head.position.y = 1.65 * hS;
-
-    // Limbs
-    const lt = 1 + (fat - 1) * 0.2;
-    lArm.scale.set(lt, hS, lt);
-    rArm.scale.set(lt, hS, lt);
-    lLeg.scale.set(lt * 0.92, hS * 1.05, lt * 0.92);
-    rLeg.scale.set(lt * 0.92, hS * 1.05, lt * 0.92);
-    lArm.position.y = 1.42 * hS;
-    rArm.position.y = 1.42 * hS;
-    lLeg.position.y = 0.82 * hS;
-    rLeg.position.y = 0.82 * hS;
-
-    // Category color (alarming)
-    const c = new THREE.Color(categorize(bmi).color);
-    if (torso.material instanceof THREE.MeshPhongMaterial) torso.material.color.copy(c);
-    const skinC = c.clone().lerp(new THREE.Color(0xdeb887), 0.35);
-    if (head.material instanceof THREE.MeshPhongMaterial) head.material.color.copy(skinC);
-    if (lArm.material instanceof THREE.MeshPhongMaterial) lArm.material.color.copy(skinC);
-    if (rArm.material instanceof THREE.MeshPhongMaterial) rArm.material.color.copy(skinC);
-
-    // Preserve user rotation
-    bodyGroup.rotation.y = rotY;
-    bodyGroup.rotation.x = rotX;
-  }
-
-  function updateLiveModel() {
-    const c = els.bodyViz;
-    if (!c) return;
-    if (!threeRenderer) initThree(c);
-
-    let hCm = 170, bmi = 22;
-    const g = (document.querySelector('input[name="gender"]:checked') as HTMLInputElement)?.value as 'male' | 'female' || 'male';
-
+  function updateBodyViz() {
+    const img = els.bodyModel;
+    if (!img) return;
+    let h = 170, w = 70, bmi = 22;
+    const gEl = document.querySelector('input[name="gender"]:checked');
+    const gender = gEl ? gEl.value : 'male';
     if (units === 'metric') {
-      hCm = parseFloat(els.heightCm.value) || 170;
-      const w = parseFloat(els.weightKg.value) || 70;
-      bmi = w / ((hCm / 100) ** 2);
+      h = parseFloat(els.heightCm.value) || 170;
+      w = parseFloat(els.weightKg.value) || 70;
+      bmi = w / ((h / 100) ** 2);
     } else {
       const ft = parseFloat(els.heightFt.value) || 5;
-      const in_ = parseFloat(els.heightIn.value) || 10;
-      hCm = (ft * 12 + in_) * 2.54;
-      const wLb = parseFloat(els.weightLb.value) || 160;
-      const totalIn = ft * 12 + in_;
-      bmi = (703 * wLb) / (totalIn * totalIn);
+      const inch = parseFloat(els.heightIn.value) || 10;
+      h = (ft * 12 + inch) * 2.54;
+      w = parseFloat(els.weightLb.value) || 160;
+      const totalIn = ft * 12 + inch;
+      bmi = (703 * w) / (totalIn * totalIn);
     }
+    const cat = categorize(bmi);
+    const key = `${gender}-${cat.id}`;
+    const newSrc = bodyImages[key] || bodyImages['male-normal'];
+    if (!img.src.endsWith(newSrc)) {
+      img.style.opacity = '0.5';
+      setTimeout(() => {
+        img.src = newSrc;
+        img.style.opacity = '1';
+      }, 120);
+    }
+    // live act with scale (continuous feel while sliding, no jump)
+    let fatS = 1.0;
+    if (cat.id === 'underweight') fatS = 0.78 + (bmi / 18.5) * 0.22;
+    else if (cat.id === 'normal') fatS = 0.92 + ((bmi - 18.5) / 6.5) * 0.18;
+    else if (cat.id === 'overweight') fatS = 1.0 + ((bmi - 25) / 5) * 0.25;
+    else fatS = 1.15 + ((bmi - 30) / 15) * 0.35;
+    fatS = Math.max(0.75, Math.min(1.55, fatS));
+    img.style.transform = `scaleX(${fatS})`;
+    if (els.bodyStatus) {
+      els.bodyStatus.textContent = `${cat.label} • ${bmi.toFixed(1)} (illustrative)`;
+    }
+    // model only alarm tint (not full screen, no interrupt while adjusting)
+    if (els.modelAlarm) {
+      els.modelAlarm.style.opacity = (bmi >= 30 || bmi < 17) ? (bmi >= 35 ? '0.45' : '0.3') : '0';
+    }
+  }
 
-    updateThreeModel(bmi, hCm, g);
+  // 3D rotate (CSS 3D tilt on container, fast response)
+  const modelContainer = els.bodyModelContainer;
+  const modelInner = els.bodyModelInner;
+  if (modelContainer && modelInner) {
+    let isDrag = false;
+    let pX = 0;
+    modelContainer.addEventListener('pointerdown', (e) => {
+      isDrag = true;
+      pX = e.clientX;
+      modelContainer.setPointerCapture(e.pointerId);
+    });
+    modelContainer.addEventListener('pointermove', (e) => {
+      if (!isDrag) return;
+      const dx = e.clientX - pX;
+      modelRotY += dx * 0.6; // fast
+      modelInner.style.transform = `rotateY(${modelRotY}deg)`;
+      pX = e.clientX;
+    });
+    const stopDrag = (e) => {
+      isDrag = false;
+      if (e && e.pointerId) modelContainer.releasePointerCapture(e.pointerId);
+    };
+    modelContainer.addEventListener('pointerup', stopDrag);
+    modelContainer.addEventListener('pointerleave', stopDrag);
+    modelContainer.addEventListener('dblclick', () => {
+      modelRotY = 0;
+      modelInner.style.transform = `rotateY(0deg)`;
+    });
+  }
+
+  function updateLiveViz() {
+    updateBodyViz();
   }
 
   // initial
   setUnits(units);
-  updateLiveModel();
+  updateLiveViz();
 }

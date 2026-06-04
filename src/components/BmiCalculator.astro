@@ -59,7 +59,6 @@
   <div class="mt-4 flex flex-wrap gap-2" role="group" aria-label="Quick presets">
     <button type="button" data-preset="average" class="preset-chip">Average (BMI ~22)</button>
     <button type="button" data-preset="athlete" class="preset-chip">Athletic build</button>
-    <button type="button" data-preset="high" class="preset-chip">Higher BMI demo</button>
   </div>
 
   <div class="mt-4 flex flex-wrap gap-4 rounded-xl bg-(--color-canvas) px-4 py-3 text-sm">
@@ -186,16 +185,15 @@
     </div>
   </div>
 
-  <!-- Proper 3D body model using three.js (per your request for real 3D that user can move/rotate, reacts to inputs, gender-specific proportions, realistic look). 
-       Replaces previous 2D canvas. Updates live but rotation state is preserved (fixes the "jumping pointer / reset view" issue during drag). 
-       Male/female change body composition (shoulders vs hips). Fatness from BMI/weight. Height scales. Color by category. Drag canvas to rotate. -->
   <div class="mt-6">
-    <div class="flex items-baseline justify-between mb-1">
-      <h3 class="text-sm font-medium text-(--color-body)">Your 3D Body Model</h3>
-      <span class="text-[10px] text-(--color-mute)">Drag to rotate • Live with inputs & gender</span>
+    <h3 class="text-sm font-medium text-(--color-body) mb-1">Your Body Visualization <span class="text-[10px] text-(--color-mute)">(live updates • drag to rotate)</span></h3>
+    <div id="body-model-container" class="mx-auto relative overflow-hidden rounded-2xl border border-(--color-hairline) bg-(--color-canvas)" style="width:320px; height:400px; perspective:900px;">
+      <div id="body-model-inner" class="w-full h-full transition-transform" style="transform-style:preserve-3d;">
+        <img id="body-model" src="/images/bodies/1.jpg" class="w-full h-full object-contain transition-all duration-200" alt="Body visualization based on your height, weight, gender and BMI.">
+        <div id="model-alarm" class="absolute inset-0 bg-red-500/30 pointer-events-none transition-opacity duration-300" style="opacity:0;"></div>
+      </div>
     </div>
-    <canvas id="body-viz" width="320" height="320" class="mx-auto block rounded-2xl border border-(--color-hairline) bg-(--color-canvas) cursor-grab active:cursor-grabbing touch-none" aria-label="Interactive 3D human body model. Shape and proportions update with height, weight, BMI and gender selection. Rotate by dragging."></canvas>
-    <p class="text-center text-xs text-(--color-mute) mt-1">Stylized but realistic proportions. Male: broader shoulders; Female: wider hips. Red = high risk, green = healthy.</p>
+    <p id="body-status" class="text-center text-xs text-(--color-mute) mt-1"></p>
   </div>
 
   <div id="result-panel" class="mt-8 hidden">
@@ -226,11 +224,8 @@
 
     <ul id="result-details" class="mt-6 space-y-2 text-sm text-(--color-body)"></ul>
 
-    <!-- Personalized recs for value-add: actionable, based on inputs/BMI. Shows only when out of healthy range for focus. Gives real support & differentiates from plain calculators. -->
     <div id="recs-panel" class="mt-4 hidden rounded-xl border border-(--color-hairline) bg-(--color-canvas) p-4">
-      <h4 class="font-semibold text-(--color-ink) flex items-center gap-2">
-        <span>Personalized Action Plan</span>
-      </h4>
+      <h4 class="font-semibold text-(--color-ink)">Personalized Action Plan</h4>
       <div id="recs-content" class="mt-2 text-sm text-(--color-body) space-y-1"></div>
       <p class="mt-3 text-[10px] text-(--color-mute)">General suggestions only. Consult a doctor or dietitian for advice specific to your health, age, and conditions.</p>
     </div>
