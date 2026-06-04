@@ -23,9 +23,13 @@
     "@tailwindcss/vite": "^4.3.0",
     "astro": "^6.4.4",
     "tailwindcss": "^4.3.0",
+    "three": "^0.184.0",
     "wrangler": "^4.98.0"
   },
   "overrides": {
     "vite": "^7"
+  },
+  "devDependencies": {
+    "@types/three": "^0.184.1"
   }
 }

@@ -138,6 +138,7 @@
         max="200"
         step="0.1"
         value="70"
+        autocomplete="off"
         class="mt-2 w-full rounded-xl border border-(--color-hairline) bg-(--color-canvas) px-4 py-2 text-lg tabular-nums outline-none focus:border-(--color-accent)"
       />
     </div>
@@ -151,7 +152,7 @@
           <button type="button" data-nudge="height-ft" data-delta="-1" class="nudge-btn">−</button>
         </div>
         <input type="range" id="height-ft-range" min="4" max="7" value="5" class="bmi-range mt-2" />
-        <input type="number" id="height-ft" min="4" max="7" value="5" class="mt-2 w-full rounded-xl border border-(--color-hairline) bg-(--color-canvas) px-4 py-2 text-lg" />
+        <input type="number" id="height-ft" min="4" max="7" value="5" autocomplete="off" class="mt-2 w-full rounded-xl border border-(--color-hairline) bg-(--color-canvas) px-4 py-2 text-lg" />
       </div>
       <div>
         <div class="flex items-center justify-between">
@@ -159,7 +160,7 @@
           <button type="button" data-nudge="height-in" data-delta="1" class="nudge-btn">+</button>
         </div>
         <input type="range" id="height-in-range" min="0" max="11" value="10" class="bmi-range mt-2" />
-        <input type="number" id="height-in" min="0" max="11" value="10" class="mt-2 w-full rounded-xl border border-(--color-hairline) bg-(--color-canvas) px-4 py-2 text-lg" />
+        <input type="number" id="height-in" min="0" max="11" value="10" autocomplete="off" class="mt-2 w-full rounded-xl border border-(--color-hairline) bg-(--color-canvas) px-4 py-2 text-lg" />
       </div>
     </div>
     <div>
@@ -179,26 +180,22 @@
         max="400"
         step="0.1"
         value="160"
+        autocomplete="off"
         class="mt-2 w-full rounded-xl border border-(--color-hairline) bg-(--color-canvas) px-4 py-2 text-lg tabular-nums"
       />
     </div>
   </div>
 
-  <!-- Live reacting body visualization: updates continuously as you adjust inputs (height/weight affect shape & scale; BMI affects color & alerts). Provides immediate visual feedback & value beyond numbers. Illustrative only. -->
+  <!-- Proper 3D body model using three.js (per your request for real 3D that user can move/rotate, reacts to inputs, gender-specific proportions, realistic look). 
+       Replaces previous 2D canvas. Updates live but rotation state is preserved (fixes the "jumping pointer / reset view" issue during drag). 
+       Male/female change body composition (shoulders vs hips). Fatness from BMI/weight. Height scales. Color by category. Drag canvas to rotate. -->
   <div class="mt-6">
-    <div class="flex items-center justify-between mb-2">
-      <h3 class="text-sm font-medium text-(--color-body)">Live Body Visualization</h3>
-      <span class="text-[10px] text-(--color-mute)">Updates live • Educational</span>
+    <div class="flex items-baseline justify-between mb-1">
+      <h3 class="text-sm font-medium text-(--color-body)">Your 3D Body Model</h3>
+      <span class="text-[10px] text-(--color-mute)">Drag to rotate • Live with inputs & gender</span>
     </div>
-    <div class="relative mx-auto w-[300px]">
-      <canvas id="body-viz" width="300" height="380" class="block border border-(--color-hairline) rounded-2xl bg-(--color-canvas) shadow-inner cursor-crosshair" aria-label="Dynamic body model. Torso width and overall scale react to your current height and weight. Color and warning overlays react to BMI category for instant feedback. Tilt with mouse for 3D feel."></canvas>
-      <div id="viz-overlay" class="absolute inset-0 rounded-2xl pointer-events-none hidden flex items-center justify-center">
-        <div class="text-center px-4">
-          <p id="viz-warning" class="font-bold text-lg"></p>
-        </div>
-      </div>
-    </div>
-    <p id="viz-status" class="mt-1 text-center text-xs text-(--color-mute)"></p>
+    <canvas id="body-viz" width="320" height="320" class="mx-auto block rounded-2xl border border-(--color-hairline) bg-(--color-canvas) cursor-grab active:cursor-grabbing touch-none" aria-label="Interactive 3D human body model. Shape and proportions update with height, weight, BMI and gender selection. Rotate by dragging."></canvas>
+    <p class="text-center text-xs text-(--color-mute) mt-1">Stylized but realistic proportions. Male: broader shoulders; Female: wider hips. Red = high risk, green = healthy.</p>
   </div>
 
   <div id="result-panel" class="mt-8 hidden">
