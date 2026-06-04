@@ -15,6 +15,7 @@ npm run deploy   # build + wrangler (after wrangler login)
 
 ## Docs
 
+- `WIKI.md` — **full project knowledge base** (architecture, decisions, research summary, retention — read this for context)
 - `SETUP.md` — tooling and skills
 - `LAUNCH-CHECKLIST.md` — pre-launch steps from the video
 - `AGENTS.md` — AI agent instructions (Cursor/Grok)
