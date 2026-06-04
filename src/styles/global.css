@@ -44,3 +44,112 @@ body {
 .font-display {
   font-family: var(--font-display);
 }
+
+/* BMI health alert — full-page tint for critical values */
+.bmi-alert-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  pointer-events: none;
+  background: radial-gradient(ellipse at center, rgba(239, 68, 68, 0.35), rgba(127, 29, 29, 0.15));
+  animation: bmi-pulse-overlay 2s ease-in-out infinite;
+}
+
+.bmi-alert-banner {
+  position: relative;
+  z-index: 50;
+}
+
+body.bmi-alert-critical {
+  animation: bmi-screen-flash 3s ease-in-out infinite;
+}
+
+body.bmi-alert-caution main {
+  box-shadow: inset 0 0 0 3px rgba(245, 158, 11, 0.4);
+}
+
+@keyframes bmi-pulse-overlay {
+  0%,
+  100% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes bmi-screen-flash {
+  0%,
+  100% {
+    background-color: var(--color-canvas);
+  }
+  50% {
+    background-color: color-mix(in oklch, var(--color-canvas) 70%, #7f1d1d);
+  }
+}
+
+/* 3D BMI scene */
+.bmi-scene-section {
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    color-mix(in oklch, var(--color-accent) 8%, transparent) 50%,
+    transparent 100%
+  );
+}
+
+.bmi-scene-stage {
+  perspective: 1400px;
+}
+
+.bmi-scene-track {
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+}
+
+.bmi-scene-card {
+  flex: 0 0 min(75vw, 300px);
+  transform-style: preserve-3d;
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.bmi-scene-card-inner {
+  border-radius: 1.25rem;
+  border: 1px solid var(--color-hairline);
+  background: var(--color-surface);
+  padding: 1.5rem;
+  box-shadow:
+    0 25px 50px -12px rgba(15, 23, 42, 0.15),
+    0 0 0 1px color-mix(in oklch, var(--card-accent, #10b981) 20%, transparent);
+  backface-visibility: hidden;
+}
+
+.bmi-scene-card.is-active .bmi-scene-card-inner {
+  border-color: var(--card-accent, #10b981);
+  box-shadow:
+    0 30px 60px -15px color-mix(in oklch, var(--card-accent) 40%, transparent),
+    0 0 0 2px var(--card-accent);
+}
+
+.bmi-scene-badge {
+  display: inline-block;
+  margin-bottom: 0.75rem;
+  border-radius: 9999px;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: white;
+}
+
+.gallery-track::-webkit-scrollbar,
+.bmi-scene-track::-webkit-scrollbar {
+  height: 6px;
+}
+
+.gallery-track::-webkit-scrollbar-thumb,
+.bmi-scene-track::-webkit-scrollbar-thumb {
+  border-radius: 9999px;
+  background: var(--color-hairline);
+}

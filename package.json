@@ -14,8 +14,8 @@
     "astro": "astro",
     "check": "astro check",
     "generate-types": "wrangler types",
-    "deploy": "astro build && wrangler deploy",
-    "deploy:pages": "astro build && wrangler pages deploy dist --project-name=realbmicalculator"
+    "deploy": "astro build && wrangler pages deploy dist/client --project-name=realbmicalculator --commit-dirty=true",
+    "deploy:pages": "npm run deploy"
   },
   "dependencies": {
     "@astrojs/cloudflare": "^13.6.1",

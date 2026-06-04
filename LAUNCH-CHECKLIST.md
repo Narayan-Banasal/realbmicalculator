@@ -29,7 +29,7 @@ Use this before buying the domain or applying for AdSense.
 
 - [ ] Run `npx wrangler login`
 - [ ] `npm run deploy` (or `npm run deploy:pages`)
-- [ ] Update `public/_headers` with real `*.pages.dev` host
+- [x] Update `public/_headers` with `realbmicalculator.pages.dev` + preview subdomains
 - [ ] Buy **realbmicalculator.com** (only after site works on preview URL)
 - [ ] Connect domain in Cloudflare + nameservers
 - [ ] Google Search Console + sitemap submit

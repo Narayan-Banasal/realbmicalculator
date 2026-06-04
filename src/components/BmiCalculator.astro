@@ -1,31 +1,76 @@
 ---
 ---
 
+<div id="bmi-alert-overlay" class="bmi-alert-overlay hidden" aria-hidden="true"></div>
+
+<div
+  id="bmi-alert-banner"
+  class="bmi-alert-banner mx-auto mb-6 hidden max-w-6xl px-4 sm:px-6"
+  role="alert"
+>
+  <div class="flex flex-wrap items-start justify-between gap-4 rounded-2xl border border-red-300 bg-red-50 p-4 dark:border-red-800 dark:bg-red-950/80">
+    <div>
+      <p id="alert-title" class="font-semibold text-red-800 dark:text-red-200"></p>
+      <p id="alert-message" class="mt-1 text-sm text-red-700 dark:text-red-300"></p>
+    </div>
+    <button
+      type="button"
+      id="dismiss-alert"
+      class="shrink-0 rounded-lg bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700"
+    >
+      Dismiss
+    </button>
+  </div>
+</div>
+
 <section
   id="bmi-calculator"
   class="rounded-2xl border border-(--color-hairline) bg-(--color-surface) p-5 shadow-sm sm:p-8"
   aria-labelledby="calc-heading"
 >
-  <h2 id="calc-heading" class="font-display text-xl font-semibold text-(--color-ink) sm:text-2xl">
-    Calculate your BMI
-  </h2>
-  <p class="mt-1 text-sm text-(--color-body)">Instant results · US & metric units</p>
+  <div class="flex flex-wrap items-start justify-between gap-4">
+    <div>
+      <h2 id="calc-heading" class="font-display text-xl font-semibold text-(--color-ink) sm:text-2xl">
+        Calculate your BMI
+      </h2>
+      <p class="mt-1 text-sm text-(--color-body)">Sliders + precise inputs · instant sync</p>
+    </div>
+    <div class="flex items-center gap-3">
+      <span class="text-xs font-medium uppercase tracking-wide text-(--color-mute)">Units</span>
+      <button
+        type="button"
+        id="unit-toggle"
+        role="switch"
+        aria-checked="false"
+        aria-label="Switch between metric and US units"
+        data-units="metric"
+        class="unit-switch relative h-10 w-[5.5rem] rounded-full bg-(--color-hairline) p-1 transition"
+      >
+        <span class="absolute left-2 top-1/2 -translate-y-1/2 text-[10px] font-semibold text-(--color-body)">kg</span>
+        <span class="absolute right-2 top-1/2 -translate-y-1/2 text-[10px] font-semibold text-(--color-body)">lb</span>
+        <span
+          id="unit-knob"
+          class="unit-knob block h-8 w-[2.6rem] rounded-full bg-(--color-accent) shadow-md transition-transform"
+        ></span>
+      </button>
+    </div>
+  </div>
 
-  <div class="mt-6 flex gap-2" role="group" aria-label="Unit system">
-    <button
-      type="button"
-      data-units="metric"
-      class="unit-btn rounded-lg border px-4 py-2 text-sm font-medium transition"
-    >
-      Metric (kg, cm)
-    </button>
-    <button
-      type="button"
-      data-units="us"
-      class="unit-btn rounded-lg border px-4 py-2 text-sm font-medium transition"
-    >
-      US (lb, ft/in)
-    </button>
+  <div class="mt-4 flex flex-wrap gap-2" role="group" aria-label="Quick presets">
+    <button type="button" data-preset="average" class="preset-chip">Average (BMI ~22)</button>
+    <button type="button" data-preset="athlete" class="preset-chip">Athletic build</button>
+    <button type="button" data-preset="high" class="preset-chip">Higher BMI demo</button>
+  </div>
+
+  <div class="mt-4 flex flex-wrap gap-4 rounded-xl bg-(--color-canvas) px-4 py-3 text-sm">
+    <div>
+      <span class="text-(--color-mute)">Height</span>
+      <p id="display-height" class="font-semibold tabular-nums text-(--color-ink)">—</p>
+    </div>
+    <div>
+      <span class="text-(--color-mute)">Weight</span>
+      <p id="display-weight" class="font-semibold tabular-nums text-(--color-ink)">—</p>
+    </div>
   </div>
 
   <div class="mt-6 grid gap-4 sm:grid-cols-2">
@@ -37,7 +82,7 @@
         min="2"
         max="120"
         placeholder="25"
-        class="mt-1 w-full rounded-xl border border-(--color-hairline) bg-(--color-canvas) px-4 py-3 text-(--color-ink) outline-none focus:border-(--color-accent) focus:ring-2 focus:ring-(--color-accent)/20"
+        class="mt-1 w-full rounded-xl border border-(--color-hairline) bg-(--color-canvas) px-4 py-3 outline-none focus:border-(--color-accent) focus:ring-2 focus:ring-(--color-accent)/20"
       />
     </label>
     <fieldset class="block">
@@ -55,67 +100,86 @@
     </fieldset>
   </div>
 
-  <div id="height-metric" class="mt-4 grid gap-4 sm:grid-cols-2">
-    <label class="block sm:col-span-2">
-      <span class="text-sm font-medium text-(--color-body)">Height (cm)</span>
+  <div id="height-metric" class="mt-6 space-y-6">
+    <div>
+      <div class="flex items-center justify-between gap-2">
+        <label for="height-cm" class="text-sm font-medium text-(--color-body)">Height (cm)</label>
+        <div class="flex gap-1">
+          <button type="button" data-nudge="height-cm" data-delta="-1" class="nudge-btn" aria-label="Decrease height">−</button>
+          <button type="button" data-nudge="height-cm" data-delta="1" class="nudge-btn" aria-label="Increase height">+</button>
+        </div>
+      </div>
+      <input type="range" id="height-cm-range" min="120" max="220" value="170" class="bmi-range mt-2" />
       <input
         type="number"
         id="height-cm"
-        min="50"
-        max="280"
-        placeholder="170"
-        class="mt-1 w-full rounded-xl border border-(--color-hairline) bg-(--color-canvas) px-4 py-3 text-lg outline-none focus:border-(--color-accent)"
+        min="120"
+        max="220"
+        value="170"
+        class="mt-2 w-full rounded-xl border border-(--color-hairline) bg-(--color-canvas) px-4 py-2 text-lg tabular-nums outline-none focus:border-(--color-accent)"
       />
-    </label>
-    <label class="block sm:col-span-2">
-      <span class="text-sm font-medium text-(--color-body)">Weight (kg)</span>
+    </div>
+    <div>
+      <div class="flex items-center justify-between gap-2">
+        <label for="weight-kg" class="text-sm font-medium text-(--color-body)">Weight (kg)</label>
+        <div class="flex gap-1">
+          <button type="button" data-nudge="weight-kg" data-delta="-0.5" class="nudge-btn">−0.5</button>
+          <button type="button" data-nudge="weight-kg" data-delta="0.5" class="nudge-btn">+0.5</button>
+          <button type="button" data-nudge="weight-kg" data-delta="1" class="nudge-btn">+1</button>
+        </div>
+      </div>
+      <input type="range" id="weight-kg-range" min="30" max="200" step="0.5" value="70" class="bmi-range mt-2" />
       <input
         type="number"
         id="weight-kg"
-        min="20"
-        max="500"
+        min="30"
+        max="200"
         step="0.1"
-        placeholder="70"
-        class="mt-1 w-full rounded-xl border border-(--color-hairline) bg-(--color-canvas) px-4 py-3 text-lg outline-none focus:border-(--color-accent)"
+        value="70"
+        class="mt-2 w-full rounded-xl border border-(--color-hairline) bg-(--color-canvas) px-4 py-2 text-lg tabular-nums outline-none focus:border-(--color-accent)"
       />
-    </label>
+    </div>
   </div>
 
-  <div id="height-us" class="mt-4 hidden grid gap-4 sm:grid-cols-3">
-    <label class="block">
-      <span class="text-sm font-medium text-(--color-body)">Feet</span>
-      <input
-        type="number"
-        id="height-ft"
-        min="3"
-        max="8"
-        placeholder="5"
-        class="mt-1 w-full rounded-xl border border-(--color-hairline) bg-(--color-canvas) px-4 py-3 text-lg outline-none focus:border-(--color-accent)"
-      />
-    </label>
-    <label class="block">
-      <span class="text-sm font-medium text-(--color-body)">Inches</span>
-      <input
-        type="number"
-        id="height-in"
-        min="0"
-        max="11"
-        placeholder="10"
-        class="mt-1 w-full rounded-xl border border-(--color-hairline) bg-(--color-canvas) px-4 py-3 text-lg outline-none focus:border-(--color-accent)"
-      />
-    </label>
-    <label class="block sm:col-span-1">
-      <span class="text-sm font-medium text-(--color-body)">Weight (lb)</span>
+  <div id="height-us" class="mt-6 hidden space-y-6">
+    <div class="grid gap-4 sm:grid-cols-2">
+      <div>
+        <div class="flex items-center justify-between">
+          <label for="height-ft" class="text-sm font-medium text-(--color-body)">Feet</label>
+          <button type="button" data-nudge="height-ft" data-delta="-1" class="nudge-btn">−</button>
+        </div>
+        <input type="range" id="height-ft-range" min="4" max="7" value="5" class="bmi-range mt-2" />
+        <input type="number" id="height-ft" min="4" max="7" value="5" class="mt-2 w-full rounded-xl border border-(--color-hairline) bg-(--color-canvas) px-4 py-2 text-lg" />
+      </div>
+      <div>
+        <div class="flex items-center justify-between">
+          <label for="height-in" class="text-sm font-medium text-(--color-body)">Inches</label>
+          <button type="button" data-nudge="height-in" data-delta="1" class="nudge-btn">+</button>
+        </div>
+        <input type="range" id="height-in-range" min="0" max="11" value="10" class="bmi-range mt-2" />
+        <input type="number" id="height-in" min="0" max="11" value="10" class="mt-2 w-full rounded-xl border border-(--color-hairline) bg-(--color-canvas) px-4 py-2 text-lg" />
+      </div>
+    </div>
+    <div>
+      <div class="flex items-center justify-between gap-2">
+        <label for="weight-lb" class="text-sm font-medium text-(--color-body)">Weight (lb)</label>
+        <div class="flex gap-1">
+          <button type="button" data-nudge="weight-lb" data-delta="-1" class="nudge-btn">−1</button>
+          <button type="button" data-nudge="weight-lb" data-delta="1" class="nudge-btn">+1</button>
+          <button type="button" data-nudge="weight-lb" data-delta="5" class="nudge-btn">+5</button>
+        </div>
+      </div>
+      <input type="range" id="weight-lb-range" min="80" max="400" step="0.5" value="160" class="bmi-range mt-2" />
       <input
         type="number"
         id="weight-lb"
-        min="44"
-        max="1100"
+        min="80"
+        max="400"
         step="0.1"
-        placeholder="160"
-        class="mt-1 w-full rounded-xl border border-(--color-hairline) bg-(--color-canvas) px-4 py-3 text-lg outline-none focus:border-(--color-accent)"
+        value="160"
+        class="mt-2 w-full rounded-xl border border-(--color-hairline) bg-(--color-canvas) px-4 py-2 text-lg tabular-nums"
       />
-    </label>
+    </div>
   </div>
 
   <div id="result-panel" class="mt-8 hidden">
@@ -124,13 +188,10 @@
         <p class="text-sm uppercase tracking-wide text-(--color-mute)">Your BMI</p>
         <p id="bmi-value" class="font-display text-5xl font-bold tabular-nums text-(--color-ink)">—</p>
       </div>
-      <span
-        id="bmi-category"
-        class="rounded-full px-4 py-1.5 text-sm font-semibold text-white"
-      ></span>
+      <span id="bmi-category" class="rounded-full px-4 py-1.5 text-sm font-semibold text-white"></span>
     </div>
 
-    <div class="relative mt-6 h-3 overflow-hidden rounded-full bg-(--color-hairline)">
+    <div class="relative mt-6 h-4 overflow-hidden rounded-full bg-(--color-hairline)">
       <div class="absolute inset-0 flex">
         <div class="h-full w-[18.5%] bg-(--color-under)"></div>
         <div class="h-full w-[6.4%] bg-(--color-normal)"></div>
@@ -139,7 +200,7 @@
       </div>
       <div
         id="bmi-marker"
-        class="absolute top-1/2 h-5 w-5 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-white bg-(--color-ink) shadow-md transition-all duration-300"
+        class="absolute top-1/2 h-6 w-6 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-white bg-(--color-ink) shadow-lg transition-all duration-500"
         style="left: 0%"
       ></div>
     </div>
@@ -148,141 +209,60 @@
     </div>
 
     <ul id="result-details" class="mt-6 space-y-2 text-sm text-(--color-body)"></ul>
-    <button
-      type="button"
-      id="copy-result"
-      class="mt-4 text-sm font-medium text-(--color-link) hover:underline"
-    >
+    <button type="button" id="copy-result" class="mt-4 text-sm font-medium text-(--color-link) hover:underline">
       Copy result link
     </button>
   </div>
 </section>
 
 <script>
-  const STORAGE_UNITS = 'rbmi-units';
-  let units: 'metric' | 'us' = (localStorage.getItem(STORAGE_UNITS) as 'metric' | 'us') || 'metric';
-
-  const els = {
-    metric: document.getElementById('height-metric')!,
-    us: document.getElementById('height-us')!,
-    panel: document.getElementById('result-panel')!,
-    value: document.getElementById('bmi-value')!,
-    category: document.getElementById('bmi-category')!,
-    marker: document.getElementById('bmi-marker')!,
-    details: document.getElementById('result-details')!,
-    unitBtns: document.querySelectorAll<HTMLButtonElement>('.unit-btn'),
-  };
-
-  function categorize(bmi: number) {
-    if (bmi < 18.5) return { label: 'Underweight', color: 'var(--color-under)' };
-    if (bmi < 25) return { label: 'Normal weight', color: 'var(--color-normal)' };
-    if (bmi < 30) return { label: 'Overweight', color: 'var(--color-over)' };
-    return { label: 'Obese', color: 'var(--color-obese)' };
-  }
-
-  function markerPos(bmi: number) {
-    const min = 15;
-    const max = 40;
-    const p = Math.min(100, Math.max(0, ((bmi - min) / (max - min)) * 100));
-    return p;
-  }
-
-  function healthyRangeKg(hM: number) {
-    const lo = 18.5 * hM * hM;
-    const hi = 24.9 * hM * hM;
-    return { lo, hi };
-  }
-
-  function calc() {
-    let bmi: number | null = null;
-    let hM = 0;
-
-    if (units === 'metric') {
-      const cm = parseFloat((document.getElementById('height-cm') as HTMLInputElement).value);
-      const kg = parseFloat((document.getElementById('weight-kg') as HTMLInputElement).value);
-      if (cm > 0 && kg > 0) {
-        hM = cm / 100;
-        bmi = kg / (hM * hM);
-      }
-    } else {
-      const ft = parseFloat((document.getElementById('height-ft') as HTMLInputElement).value) || 0;
-      const inch = parseFloat((document.getElementById('height-in') as HTMLInputElement).value) || 0;
-      const lb = parseFloat((document.getElementById('weight-lb') as HTMLInputElement).value);
-      const totalIn = ft * 12 + inch;
-      if (totalIn > 0 && lb > 0) {
-        bmi = (703 * lb) / (totalIn * totalIn);
-        hM = totalIn * 0.0254;
-      }
-    }
-
-    if (bmi == null || !isFinite(bmi)) {
-      els.panel.classList.add('hidden');
-      return;
-    }
-
-    const cat = categorize(bmi);
-    els.panel.classList.remove('hidden');
-    els.value.textContent = bmi.toFixed(1);
-    els.category.textContent = cat.label;
-    els.category.style.backgroundColor = cat.color;
-    els.marker.style.left = `${markerPos(bmi)}%`;
-
-    const range = healthyRangeKg(hM);
-    const prime = (bmi / 25).toFixed(2);
-    const lines = [
-      `Healthy BMI range: 18.5 – 24.9 kg/m²`,
-      units === 'metric'
-        ? `Healthy weight for your height: ${range.lo.toFixed(1)} – ${range.hi.toFixed(1)} kg`
-        : `Healthy weight for your height: ${(range.lo * 2.205).toFixed(1)} – ${(range.hi * 2.205).toFixed(1)} lb`,
-      `BMI Prime: ${prime}`,
-    ];
-    els.details.innerHTML = lines.map((t) => `<li>${t}</li>`).join('');
-  }
-
-  function setUnits(u: 'metric' | 'us') {
-    units = u;
-    localStorage.setItem(STORAGE_UNITS, u);
-    els.metric.classList.toggle('hidden', u !== 'metric');
-    els.us.classList.toggle('hidden', u !== 'us');
-    els.unitBtns.forEach((btn) => {
-      const active = btn.dataset.units === u;
-      btn.classList.toggle('border-(--color-accent)', active);
-      btn.classList.toggle('bg-(--color-accent)/10', active);
-      btn.classList.toggle('text-(--color-ink)', active);
-      btn.classList.toggle('border-(--color-hairline)', !active);
-    });
-    calc();
-  }
-
-  els.unitBtns.forEach((btn) => {
-    btn.addEventListener('click', () => setUnits(btn.dataset.units as 'metric' | 'us'));
-  });
-
-  document.querySelectorAll('#bmi-calculator input').forEach((input) => {
-    input.addEventListener('input', calc);
-  });
-
-  document.getElementById('copy-result')?.addEventListener('click', async () => {
-    const params = new URLSearchParams({ units });
-    if (units === 'metric') {
-      params.set('cm', (document.getElementById('height-cm') as HTMLInputElement).value);
-      params.set('kg', (document.getElementById('weight-kg') as HTMLInputElement).value);
-    } else {
-      params.set('ft', (document.getElementById('height-ft') as HTMLInputElement).value);
-      params.set('in', (document.getElementById('height-in') as HTMLInputElement).value);
-      params.set('lb', (document.getElementById('weight-lb') as HTMLInputElement).value);
-    }
-    const url = `${location.origin}${location.pathname}?${params}`;
-    await navigator.clipboard.writeText(url);
-  });
-
-  const p = new URLSearchParams(location.search);
-  if (p.get('units') === 'us') setUnits('us');
-  else setUnits('metric');
-  if (p.get('cm')) (document.getElementById('height-cm') as HTMLInputElement).value = p.get('cm')!;
-  if (p.get('kg')) (document.getElementById('weight-kg') as HTMLInputElement).value = p.get('kg')!;
-  if (p.get('ft')) (document.getElementById('height-ft') as HTMLInputElement).value = p.get('ft')!;
-  if (p.get('in')) (document.getElementById('height-in') as HTMLInputElement).value = p.get('in')!;
-  if (p.get('lb')) (document.getElementById('weight-lb') as HTMLInputElement).value = p.get('lb')!;
-  calc();
+  import { initBmiCalculator } from '../scripts/bmi-calculator';
+  initBmiCalculator();
 </script>
+
+<style>
+  .unit-switch[aria-checked='true'] .unit-knob {
+    transform: translateX(2.5rem);
+  }
+  .unit-switch[aria-checked='false'] .unit-knob {
+    transform: translateX(0);
+  }
+  .nudge-btn {
+    border-radius: 0.5rem;
+    border: 1px solid var(--color-hairline);
+    background: var(--color-canvas);
+    padding: 0.25rem 0.625rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--color-ink);
+    transition: border-color 0.15s, background 0.15s;
+  }
+  .nudge-btn:hover {
+    border-color: var(--color-accent);
+    background: color-mix(in oklch, var(--color-accent) 12%, var(--color-canvas));
+  }
+  .bmi-range {
+    margin-top: 0.5rem;
+    height: 0.5rem;
+    width: 100%;
+    cursor: pointer;
+    appearance: none;
+    border-radius: 9999px;
+    background: var(--color-hairline);
+    accent-color: var(--color-accent);
+  }
+  .preset-chip {
+    border-radius: 9999px;
+    border: 1px solid var(--color-hairline);
+    background: var(--color-canvas);
+    padding: 0.35rem 0.85rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--color-body);
+    transition: border-color 0.15s, color 0.15s;
+  }
+  .preset-chip:hover {
+    border-color: var(--color-accent);
+    color: var(--color-ink);
+  }
+</style>

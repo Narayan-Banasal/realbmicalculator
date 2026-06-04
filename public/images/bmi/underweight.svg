@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 360" fill="none" role="img" aria-label="Underweight body silhouette">
+  <defs>
+    <linearGradient id="u" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#93c5fd"/>
+      <stop offset="100%" stop-color="#3b82f6"/>
+    </linearGradient>
+  </defs>
+  <ellipse cx="100" cy="42" rx="28" ry="32" fill="url(#u)" opacity=".9"/>
+  <path d="M72 78 Q100 88 128 78 L118 200 Q100 210 82 200 Z" fill="url(#u)"/>
+  <path d="M88 200 L78 320 Q100 330 122 320 L112 200 Z" fill="url(#u)" opacity=".85"/>
+  <path d="M78 130 L52 260" stroke="url(#u)" stroke-width="14" stroke-linecap="round"/>
+  <path d="M122 130 L148 260" stroke="url(#u)" stroke-width="14" stroke-linecap="round"/>
+  <path d="M88 310 L72 350" stroke="url(#u)" stroke-width="12" stroke-linecap="round"/>
+  <path d="M112 310 L128 350" stroke="url(#u)" stroke-width="12" stroke-linecap="round"/>
+</svg>

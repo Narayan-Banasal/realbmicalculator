@@ -1,6 +1,7 @@
-# Video fix: noindex Cloudflare *.pages.dev preview URL (update host after first deploy)
+# Video fix: noindex all *.pages.dev until custom domain is live (duplicate content)
+# https://developers.cloudflare.com/pages/configuration/headers/
 https://realbmicalculator.pages.dev/*
   X-Robots-Tag: noindex
 
-https://:project.pages.dev/*
+https://:version.realbmicalculator.pages.dev/*
   X-Robots-Tag: noindex

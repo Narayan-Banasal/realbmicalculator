@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 360" fill="none" role="img" aria-label="Obese body silhouette">
+  <defs>
+    <linearGradient id="ob" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#fca5a5"/>
+      <stop offset="100%" stop-color="#ef4444"/>
+    </linearGradient>
+  </defs>
+  <ellipse cx="100" cy="46" rx="38" ry="38" fill="url(#ob)" opacity=".9"/>
+  <path d="M48 88 Q100 108 152 88 L150 228 Q100 245 50 228 Z" fill="url(#ob)"/>
+  <path d="M58 228 L48 308 Q100 322 152 308 L142 228 Z" fill="url(#ob)" opacity=".92"/>
+  <path d="M52 148 L28 278" stroke="url(#ob)" stroke-width="22" stroke-linecap="round"/>
+  <path d="M148 148 L172 278" stroke="url(#ob)" stroke-width="22" stroke-linecap="round"/>
+  <path d="M62 296 L48 334" stroke="url(#ob)" stroke-width="16" stroke-linecap="round"/>
+  <path d="M138 296 L152 334" stroke="url(#ob)" stroke-width="16" stroke-linecap="round"/>
+</svg>

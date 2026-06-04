@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 360" fill="none" role="img" aria-label="Healthy weight body silhouette">
+  <defs>
+    <linearGradient id="n" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#6ee7b7"/>
+      <stop offset="100%" stop-color="#10b981"/>
+    </linearGradient>
+  </defs>
+  <ellipse cx="100" cy="42" rx="30" ry="33" fill="url(#n)" opacity=".9"/>
+  <path d="M68 78 Q100 92 132 78 L125 205 Q100 215 75 205 Z" fill="url(#n)"/>
+  <path d="M82 205 L74 318 Q100 328 126 318 L118 205 Z" fill="url(#n)" opacity=".88"/>
+  <path d="M74 132 L48 268" stroke="url(#n)" stroke-width="16" stroke-linecap="round"/>
+  <path d="M126 132 L152 268" stroke="url(#n)" stroke-width="16" stroke-linecap="round"/>
+  <path d="M82 308 L66 348" stroke="url(#n)" stroke-width="13" stroke-linecap="round"/>
+  <path d="M118 308 L134 348" stroke="url(#n)" stroke-width="13" stroke-linecap="round"/>
+</svg>

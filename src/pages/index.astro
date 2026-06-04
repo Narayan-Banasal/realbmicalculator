@@ -1,6 +1,8 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import BmiCalculator from '../components/BmiCalculator.astro';
+import BmiVisualGallery from '../components/BmiVisualGallery.astro';
+import BmiScene3d from '../components/BmiScene3d.astro';
 import FaqSection from '../components/FaqSection.astro';
 
 const title = 'BMI Calculator — Free Body Mass Index Tool';
@@ -18,8 +20,9 @@ const description =
         BMI Calculator
       </h1>
       <p class="mt-4 text-lg leading-relaxed text-(--color-body)">
-        Calculate your body mass index in seconds. Our free online BMI calculator supports metric and US
-        units, shows your category on a visual scale, and explains what your number means for your health.
+        Calculate your body mass index in seconds. Drag sliders or type exact values, switch kg ↔ lb instantly,
+        see your category on a live gauge, explore 3D body-type guides, and get a clear health alert when BMI
+        crosses key thresholds.
       </p>
       <nav class="mt-6 flex flex-wrap gap-3 text-sm" aria-label="Legal and info (visible for AdSense)">
         <a href="/privacy-policy" class="rounded-lg bg-(--color-canvas) px-3 py-1.5 text-(--color-link) ring-1 ring-(--color-hairline)">Privacy Policy</a>
@@ -29,9 +32,9 @@ const description =
       </nav>
     </section>
 
-    <div class="grid gap-10 lg:grid-cols-[1fr_1.1fr] lg:gap-12">
+    <div class="grid gap-10 lg:grid-cols-[1.15fr_0.85fr] lg:gap-12">
       <BmiCalculator />
-      <aside class="space-y-6 text-sm leading-relaxed text-(--color-body)">
+      <aside class="space-y-6 text-sm leading-relaxed text-(--color-body) lg:sticky lg:top-24 lg:self-start">
         <div class="rounded-xl border border-(--color-hairline) bg-(--color-accent)/5 p-5">
           <h2 class="font-semibold text-(--color-ink)">Quick BMI categories (adults)</h2>
           <table class="mt-3 w-full text-left text-sm">
@@ -56,6 +59,12 @@ const description =
         </p>
       </aside>
     </div>
+  </div>
+
+  <BmiVisualGallery />
+  <BmiScene3d />
+
+  <div class="mx-auto max-w-6xl px-4 sm:px-6">
 
     <article class="prose-section mx-auto mt-16 max-w-3xl space-y-6 text-(--color-body)">
       <h2 class="font-display text-2xl font-semibold text-(--color-ink)">What is BMI?</h2>
@@ -67,11 +76,10 @@ const description =
       </p>
       <h2 class="font-display text-2xl font-semibold text-(--color-ink)">How to use this BMI calculator</h2>
       <p>
-        Choose metric (kilograms and centimeters) or US customary units (pounds, feet, and inches). Enter
-        your height and weight; your BMI updates automatically. You will see your BMI value, category
-        (underweight, normal, overweight, or obese), a color scale, healthy weight range for your height,
-        and BMI Prime. Optional age and gender fields help personalize your session but do not change the
-        standard adult formula.
+        Use the unit switch for metric (kg, cm) or US (lb, ft/in) — values convert automatically. Sliders give
+        quick exploration; number fields and ± buttons allow precise adjustments (0.5 kg or 1 lb steps). Your
+        BMI updates instantly with category color, healthy weight range, BMI Prime, illustrated body guide, and
+        a health alert when results fall outside safe screening ranges.
       </p>
       <h2 class="font-display text-2xl font-semibold text-(--color-ink)">Limitations of BMI</h2>
       <p>
