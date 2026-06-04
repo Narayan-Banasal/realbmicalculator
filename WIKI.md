@@ -1,6 +1,10 @@
-# Real BMI Calculator — Project Wiki
+# Real BMI Calculator — Project Wiki (Pointer)
 
-**Purpose**: Retain all knowledge, decisions, research, architecture, and implementation details for realbmicalculator.com. This is the single source of truth for the project (beyond code) so future iterations (by Narayan + Grok/Cursor agents) preserve context without re-explaining.
+**See the structured Karpathy-style wiki instead**: [wiki/index.md](wiki/index.md) + numbered docs + log.md.
+
+This root file is kept only for quick top-level access / backward references. All detailed, maintained knowledge lives in the `wiki/` directory (modeled directly on the user's other projects' LLM wikis, explicitly following Karpathy's pattern for high-signal retention).
+
+**Purpose of the wiki/**: Retain all knowledge, decisions, research, architecture, and implementation details for realbmicalculator.com. The single source of truth so future iterations preserve context.
 
 **Domain**: realbmicalculator.com  
 **Playbook**: Compile Future micro-tool method (Astro MPA + Tailwind v4 + Cloudflare Pages + SEO/AdSense prep)  

@@ -15,10 +15,11 @@ npm run deploy   # build + wrangler (after wrangler login)
 
 ## Docs
 
-- `WIKI.md` — **full project knowledge base** (architecture, decisions, research summary, retention — read this for context)
+- `wiki/` — **Karpathy-style LLM wiki** (structured knowledge base: index + 00-overview + architecture + design/implementation + research + log). **Primary retention mechanism** — read wiki/index.md first.
+- `WIKI.md` — legacy pointer to the above (for quick access)
 - `SETUP.md` — tooling and skills
 - `LAUNCH-CHECKLIST.md` — pre-launch steps from the video
-- `AGENTS.md` — AI agent instructions (Cursor/Grok)
+- `AGENTS.md` — AI agent instructions (Cursor/Grok) — now references wiki/
 - `DESIGN.md` — Vercel design tokens
 - `../bmi-research/` — competitor research
 

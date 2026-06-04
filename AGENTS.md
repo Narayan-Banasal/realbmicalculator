@@ -5,13 +5,14 @@ You are building **realbmicalculator.com** (Real BMI Calculator) using the Compi
 ## Before every UI or Astro change
 
 1. Read `DESIGN.md`
-2. Load project skills under `.agents/skills/`:
+2. Read `wiki/index.md` (Karpathy-style LLM wiki for retained knowledge) + relevant numbered pages in `wiki/`
+3. Load project skills under `.agents/skills/`:
    - `astro`
    - `tailwind-v4-best-practices`
    - `web-design-guidelines`
    - `real-bmi-micro-tool`
-3. Use MCP server **`astro-docs`** for Astro documentation lookups
-4. Use **`frontend-design`** (global) for polished, non-generic UI
+4. Use MCP server **`astro-docs`** for Astro documentation lookups
+5. Use **`frontend-design`** (global) for polished, non-generic UI
 
 ## Project goals
 
