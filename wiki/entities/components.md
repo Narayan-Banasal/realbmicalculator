@@ -13,9 +13,8 @@ updated: 2026-06-04
 
 ## Key Components
 
-- **BmiCalculator.astro**: Main card — unit toggle (metric/us, knob slider, localStorage persist?), presets, height/weight sliders + number inputs + ± buttons (step 0.5/1), live BMI result + category badge + color, healthy weight range, BMI Prime, marker on gauge bar (#bmi-marker), alert banner/overlay for critical/caution.
-- **BmiVisualGallery.astro**: Illustrated body-type guides per category (research req).
-- **BmiScene3d.astro + bmi-scene-3d.ts**: 3D-ish tilt/scale cards or WebGL/Three? interactive body scene (research "explore 3D body-type guides").
+- **BmiCalculator.astro**: Main card — unit toggle (metric/us, knob slider, localStorage persist?), presets, height/weight sliders + number inputs + ± buttons (step 0.5/1), live BMI result + category badge + color, healthy weight range, BMI Prime, marker on gauge bar (#bmi-marker). High limits: height to 250cm / ft9, weight to 400kg / 900lb. Real three.js 3D body model (gender-specific proportions, torso/belly/limb scales react live to BMI+height, fast pointer-drag yaw with preserved rotation state, no yank on input).
+- (removed: BmiVisualGallery, BmiScene3d and old image-based viz + CSS 3D; bodies/ images deleted as unused)
 - **FaqSection.astro + data/faq.ts**: 8 Qs (what is BMI, formula, healthy, accuracy/limitations, children, BMI Prime, frequency, etc.) + JSON-LD schema.
 - **Header.astro / Footer.astro**: Nav + legals (visible links), branding.
 - **ProsePage.astro / BaseLayout.astro**: Content shell for non-calc pages.

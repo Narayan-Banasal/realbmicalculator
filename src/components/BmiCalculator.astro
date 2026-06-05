@@ -87,12 +87,12 @@
           <button type="button" data-nudge="height-cm" data-delta="1" class="nudge-btn" aria-label="Increase height">+</button>
         </div>
       </div>
-      <input type="range" id="height-cm-range" min="120" max="220" value="170" class="bmi-range mt-2" />
+      <input type="range" id="height-cm-range" min="100" max="250" value="170" class="bmi-range mt-2" />
       <input
         type="number"
         id="height-cm"
-        min="120"
-        max="220"
+        min="100"
+        max="250"
         value="170"
         autocomplete="off"
         class="mt-2 w-full rounded-xl border border-(--color-hairline) bg-(--color-canvas) px-4 py-2 text-lg tabular-nums outline-none focus:border-(--color-accent)"
@@ -107,12 +107,12 @@
           <button type="button" data-nudge="weight-kg" data-delta="1" class="nudge-btn">+1</button>
         </div>
       </div>
-      <input type="range" id="weight-kg-range" min="30" max="200" step="0.5" value="70" class="bmi-range mt-2" />
+      <input type="range" id="weight-kg-range" min="30" max="350" step="0.5" value="70" class="bmi-range mt-2" />
       <input
         type="number"
         id="weight-kg"
         min="30"
-        max="200"
+        max="400"
         step="0.1"
         value="70"
         autocomplete="off"
@@ -128,8 +128,8 @@
           <label for="height-ft" class="text-sm font-medium text-(--color-body)">Feet</label>
           <button type="button" data-nudge="height-ft" data-delta="-1" class="nudge-btn">−</button>
         </div>
-        <input type="range" id="height-ft-range" min="4" max="7" value="5" class="bmi-range mt-2" />
-        <input type="number" id="height-ft" min="4" max="7" value="5" autocomplete="off" class="mt-2 w-full rounded-xl border border-(--color-hairline) bg-(--color-canvas) px-4 py-2 text-lg" />
+        <input type="range" id="height-ft-range" min="4" max="9" value="5" class="bmi-range mt-2" />
+        <input type="number" id="height-ft" min="4" max="9" value="5" autocomplete="off" class="mt-2 w-full rounded-xl border border-(--color-hairline) bg-(--color-canvas) px-4 py-2 text-lg" />
       </div>
       <div>
         <div class="flex items-center justify-between">
@@ -149,12 +149,12 @@
           <button type="button" data-nudge="weight-lb" data-delta="5" class="nudge-btn">+5</button>
         </div>
       </div>
-      <input type="range" id="weight-lb-range" min="80" max="400" step="0.5" value="160" class="bmi-range mt-2" />
+      <input type="range" id="weight-lb-range" min="80" max="880" step="0.5" value="160" class="bmi-range mt-2" />
       <input
         type="number"
         id="weight-lb"
         min="80"
-        max="400"
+        max="900"
         step="0.1"
         value="160"
         autocomplete="off"
@@ -165,10 +165,8 @@
 
   <div class="mt-6">
     <h3 class="text-sm font-medium text-(--color-body) mb-1">Your Body Visualization <span class="text-[10px] text-(--color-mute)">(live updates • drag to rotate)</span></h3>
-    <div id="body-model-container" class="mx-auto relative overflow-hidden rounded-2xl border border-(--color-hairline) bg-(--color-canvas)" style="width:320px; height:400px; perspective:900px;">
-      <div id="body-model-inner" class="w-full h-full transition-transform" style="transform-style:preserve-3d;">
-        <img id="body-model" src="/images/bodies/1.jpg" class="w-full h-full object-contain transition-all duration-200" alt="Body visualization based on your height, weight, gender and BMI.">
-      </div>
+    <div id="body-model-container" class="mx-auto relative overflow-hidden rounded-2xl border border-(--color-hairline) bg-(--color-canvas)" style="width:320px; height:400px;">
+      <canvas id="body-canvas" width="320" height="400" class="block touch-none" style="width:320px; height:400px;"></canvas>
     </div>
     <p id="body-status" class="text-center text-xs text-(--color-mute) mt-1"></p>
   </div>
