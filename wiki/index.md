@@ -24,7 +24,7 @@ updated: 2026-06-05
 | Page | Summary |
 |------|---------|
 | [[Astro Pages and Routing]] | MPA structure under src/pages/ (index + supporting: bmi-chart, for-women, for-men, about, contact, privacy-policy, terms, 404), layouts/BaseLayout, legal nav visible on home for AdSense/SEO. |
-| [[UI Components and Visuals]] | Components: BmiCalculator.astro (sliders, unit toggle, live results), BmiVisualGallery.astro, BmiScene3d.astro + ts, FaqSection, Header, Footer, ProsePage; data/faq.ts; scripts for interactivity. |
+| [[UI Components and Visuals]] | Components: BmiCalculator.astro (sliders, unit toggle, live results, real photo body viz reactive to height+weight), FaqSection, Header, Footer, ProsePage; data/faq.ts; scripts for interactivity. (Old gallery/scene 3D components removed.) |
 
 ## Concepts
 
