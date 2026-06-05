@@ -164,9 +164,9 @@
   </div>
 
   <div class="mt-6">
-    <h3 class="text-sm font-medium text-(--color-body) mb-1">Your Body Visualization <span class="text-[10px] text-(--color-mute)">(live updates • drag to rotate)</span></h3>
+    <h3 class="text-sm font-medium text-(--color-body) mb-1">Your Body Visualization <span class="text-[10px] text-(--color-mute)">(live updates • based on your height &amp; weight)</span></h3>
     <div id="body-model-container" class="mx-auto relative overflow-hidden rounded-2xl border border-(--color-hairline) bg-(--color-canvas)" style="width:320px; height:400px;">
-      <canvas id="body-canvas" width="320" height="400" class="block touch-none" style="width:320px; height:400px;"></canvas>
+      <img id="body-model" src="/images/bodies/male-normal.jpg" class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 object-contain transition-all duration-150" alt="Realistic body visualization that updates with your height and weight." style="height: 78%; width: auto; max-width: 92%;">
     </div>
     <p id="body-status" class="text-center text-xs text-(--color-mute) mt-1"></p>
   </div>

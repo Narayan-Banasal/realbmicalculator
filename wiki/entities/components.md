@@ -13,8 +13,8 @@ updated: 2026-06-04
 
 ## Key Components
 
-- **BmiCalculator.astro**: Main card — unit toggle (metric/us, knob slider, localStorage persist?), presets, height/weight sliders + number inputs + ± buttons (step 0.5/1), live BMI result + category badge + color, healthy weight range, BMI Prime, marker on gauge bar (#bmi-marker). High limits: height to 250cm / ft9, weight to 400kg / 900lb. Real three.js 3D body model (gender-specific proportions, torso/belly/limb scales react live to BMI+height, fast pointer-drag yaw with preserved rotation state, no yank on input).
-- (removed: BmiVisualGallery, BmiScene3d and old image-based viz + CSS 3D; bodies/ images deleted as unused)
+- **BmiCalculator.astro**: Main card — unit toggle (metric/us, knob slider, localStorage persist?), presets, height/weight sliders + number inputs + ± buttons (step 0.5/1), live BMI result + category badge + color, healthy weight range, BMI Prime, marker on gauge bar (#bmi-marker). High limits: height to 250cm / ft9, weight to 400kg / 900lb.
+- Body Visualization: uses real photorealistic generated full-body person pictures (male/female). The actual picture (src) changes when weight/BMI category or gender changes. The displayed height of the person in the frame scales with the height input (taller input = person occupies more vertical space in the box). No stretching of the photo for weight (category switch provides the shape change); height uses proportional sizing for visual stature feedback. Updated live on every input. (Previous 3D mesh attempt removed per preference for real pictures.)
 - **FaqSection.astro + data/faq.ts**: 8 Qs (what is BMI, formula, healthy, accuracy/limitations, children, BMI Prime, frequency, etc.) + JSON-LD schema.
 - **Header.astro / Footer.astro**: Nav + legals (visible links), branding.
 - **ProsePage.astro / BaseLayout.astro**: Content shell for non-calc pages.
