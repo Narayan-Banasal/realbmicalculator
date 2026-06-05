@@ -11,6 +11,8 @@ import {
   type UnitSystem,
 } from '../lib/bmi';
 
+import * as THREE from 'three';
+
 const STORAGE_UNITS = 'rbmi-units';
 
 export function initBmiCalculator() {
@@ -43,7 +45,7 @@ export function initBmiCalculator() {
     displayHeight: document.getElementById('display-height')!,
     displayWeight: document.getElementById('display-weight')!,
     bodyModelContainer: document.getElementById('body-model-container')!,
-    bodyModel: document.getElementById('body-model') as HTMLImageElement,
+    bodyCanvas: document.getElementById('body-canvas') as HTMLCanvasElement,
     bodyStatus: document.getElementById('body-status')!,
   };
 
@@ -276,9 +278,11 @@ export function initBmiCalculator() {
     els.weightLbRange.value = p.get('lb')!;
   }
 
-  // Real pictures (photorealistic generated full-body people).
-  // The picture itself changes when weight/BMI or gender changes (different body type photo).
-  // The displayed height of the person in the frame changes with the height input (taller = more vertical space).
+  // 3D model that uses the real pictures as textures on a plane (true 3D + real photo).
+  // Drag to rotate the model in 3D space.
+  // Weight/BMI + gender: swaps the real photo texture (different body type picture).
+  // Height: scales the 3D model taller.
+  // Minimal clothing in the pictures, straight pose, clean & simple.
   const bodyImages: Record<string, string> = {
     'male-underweight': '/images/bodies/male-underweight.jpg',
     'male-normal': '/images/bodies/male-normal.jpg',
@@ -290,15 +294,105 @@ export function initBmiCalculator() {
     'female-obese': '/images/bodies/female-obese.jpg',
   };
 
-  let currentBodySrc = '';
+  let renderer: THREE.WebGLRenderer | null = null;
+  let scene: THREE.Scene | null = null;
+  let camera: THREE.PerspectiveCamera | null = null;
+  let modelGroup: THREE.Group | null = null;
+  let plane: THREE.Mesh | null = null;
+  let currentTexKey = '';
+  let isDrag = false;
+  let lastX = 0;
+
+  function init3DViz() {
+    const canvas = els.bodyCanvas;
+    if (!canvas || renderer) return;
+
+    renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    renderer.setSize(320, 400);
+
+    scene = new THREE.Scene();
+
+    camera = new THREE.PerspectiveCamera(40, 320 / 400, 0.1, 10);
+    camera.position.set(0, 0, 2.3);
+    camera.lookAt(0, 0, 0);
+
+    // simple 3D lighting for depth and realism on the photo texture
+    scene.add(new THREE.AmbientLight(0xffffff, 0.55));
+    const d1 = new THREE.DirectionalLight(0xffffff, 0.9);
+    d1.position.set(1.2, 1.5, 2);
+    scene.add(d1);
+    const d2 = new THREE.DirectionalLight(0xffffff, 0.35);
+    d2.position.set(-1.5, 0.5, -2);
+    scene.add(d2);
+
+    modelGroup = new THREE.Group();
+    scene.add(modelGroup);
+
+    // drag to rotate in 3D (mainly yaw, feels like turning the person)
+    const onDown = (e: PointerEvent) => {
+      isDrag = true;
+      lastX = e.clientX;
+      canvas.setPointerCapture(e.pointerId);
+    };
+    const onMove = (e: PointerEvent) => {
+      if (!isDrag || !modelGroup) return;
+      const dx = e.clientX - lastX;
+      modelGroup.rotation.y += dx * 0.0055;
+      lastX = e.clientX;
+      render3D();
+    };
+    const onUp = (e?: PointerEvent) => {
+      isDrag = false;
+      if (e && e.pointerId) canvas.releasePointerCapture(e.pointerId);
+    };
+    canvas.addEventListener('pointerdown', onDown);
+    canvas.addEventListener('pointermove', onMove);
+    canvas.addEventListener('pointerup', onUp);
+    canvas.addEventListener('pointerleave', onUp);
+    canvas.addEventListener('dblclick', () => {
+      if (modelGroup) modelGroup.rotation.y = 0.25;
+      render3D();
+    });
+
+    // initial gentle angle
+    modelGroup.rotation.y = 0.25;
+
+    render3D();
+  }
+
+  function loadTextureForKey(key: string) {
+    if (!modelGroup) return;
+    const url = bodyImages[key] || bodyImages['male-normal'];
+
+    // remove previous plane
+    if (plane) {
+      modelGroup.remove(plane);
+      plane = null;
+    }
+
+    const loader = new THREE.TextureLoader();
+    loader.load(url, (tex) => {
+      // plane size tuned to look good for full body photos (approx body aspect)
+      const h = 1.65;
+      const w = h * 0.48; // narrow for body
+      const geo = new THREE.PlaneGeometry(w, h);
+      const mat = new THREE.MeshPhongMaterial({
+        map: tex,
+        side: THREE.DoubleSide,
+        transparent: false,
+        shininess: 8,
+      });
+      plane = new THREE.Mesh(geo, mat);
+      modelGroup.add(plane);
+      render3D();
+    });
+  }
 
   function updateLiveViz() {
-    const img = els.bodyModel;
-    if (!img) return;
+    if (!renderer) init3DViz();
 
-    let h = 170;
-    let w = 70;
-    let bmi = 22;
+    let h = 170, w = 70, bmi = 22;
     const gEl = document.querySelector('input[name="gender"]:checked') as HTMLInputElement | null;
     const gender = (gEl?.value || 'male') as 'male' | 'female';
 
@@ -317,32 +411,38 @@ export function initBmiCalculator() {
 
     const cat = categorize(bmi);
     const key = `${gender}-${cat.id}`;
-    const newSrc = bodyImages[key] || bodyImages['male-normal'];
 
-    // Change the real picture when the body type (weight) or gender changes.
-    // Smooth fade to avoid jarring switch.
-    if (newSrc !== currentBodySrc) {
-      currentBodySrc = newSrc;
-      img.style.transition = 'opacity 140ms linear, height 140ms linear';
-      img.style.opacity = '0.4';
-      setTimeout(() => {
-        img.src = newSrc;
-        img.style.opacity = '1';
-      }, 80);
+    // change the real picture texture when weight (category) or gender changes
+    if (key !== currentTexKey) {
+      currentTexKey = key;
+      loadTextureForKey(key);
     }
 
-    // Height controls how tall the real person photo appears inside the fixed box.
-    // This gives direct visual feedback for height changes without distorting the photo.
-    const minH = 100;
-    const maxH = 250;
-    const t = Math.max(0, Math.min(1, (h - minH) / (maxH - minH)));
-    const heightPercent = 52 + t * 42; // 52% for short → ~94% for very tall
-    img.style.height = `${heightPercent.toFixed(1)}%`;
-    img.style.width = 'auto';
+    // height scales the entire 3D model taller/shorter (real 3D proportion change)
+    if (modelGroup) {
+      const hf = Math.max(0.58, Math.min(1.55, (h || 170) / 170));
+      modelGroup.scale.set(1, hf, 1);
+    }
+
+    // light continuous "weight" effect via slight width scale on the plane (in addition to picture swap)
+    if (plane) {
+      let fat = 1.0;
+      if (bmi < 18.5) fat = 0.82;
+      else if (bmi < 25) fat = 1.0;
+      else if (bmi < 30) fat = 1.1;
+      else fat = 1.22;
+      plane.scale.set(fat, 1, 1);
+    }
+
+    render3D();
 
     if (els.bodyStatus) {
-      els.bodyStatus.textContent = `${cat.label} • ${bmi.toFixed(1)} (illustrative)`;
+      els.bodyStatus.textContent = `${cat.label} • ${bmi.toFixed(1)} (3D model)`;
     }
+  }
+
+  function render3D() {
+    if (renderer && scene && camera) renderer.render(scene, camera);
   }
 
   // initial
