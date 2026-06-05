@@ -1,7 +1,7 @@
 ---
 title: Wiki Index
 type: index
-updated: 2026-06-04
+updated: 2026-06-05
 ---
 
 # Real BMI Calculator Wiki — Index
