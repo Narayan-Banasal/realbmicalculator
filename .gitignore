@@ -24,3 +24,4 @@ npm-debug.log*
 .idea/
 
 # Project-specific (add any generated local files here)
+/*.png

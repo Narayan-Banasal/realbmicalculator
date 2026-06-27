@@ -1,0 +1,31 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import BmiCalculator from '../../components/BmiCalculator.astro';
+const lang = 'fr';
+---
+<BaseLayout title="Tableau IMC par Taille et Poids | BMI Result" description="Tableau de l'IMC par taille et poids avec code couleur. Trouvez rapidement votre catégorie de poids corporel selon l'OMS.">
+  <div class="mx-auto max-w-4xl px-4 py-10 sm:px-6">
+    <h1 class="font-display text-3xl font-bold text-(--color-ink)">Tableau IMC</h1>
+    <p class="mt-2 text-(--color-body)">Trouvez votre IMC dans le tableau par taille et poids.</p>
+    <div class="mt-8"><BmiCalculator lang={lang} /></div>
+    <div class="mt-12 overflow-x-auto rounded-xl border border-(--color-hairline)">
+      <table class="w-full min-w-[500px] text-center text-sm">
+        <thead class="bg-(--color-canvas)">
+          <tr><th class="p-3 text-left">Poids (kg)</th>{[150,160,165,170,175,180,185].map(h => <th class="p-3">{h}cm</th>)}</tr>
+        </thead>
+        <tbody>
+          {[50,60,65,70,75,80,90,100,110,120].map(w => (
+            <tr class="border-t border-(--color-hairline)">
+              <td class="p-3 font-medium text-left">{w} kg</td>
+              {[150,160,165,170,175,180,185].map(h => {
+                const bmi = w / ((h/100)**2);
+                const color = bmi < 18.5 ? 'text-blue-600' : bmi < 25 ? 'text-emerald-600' : bmi < 30 ? 'text-amber-600' : 'text-red-600';
+                return <td class={`p-3 tabular-nums font-semibold ${color}`}>{bmi.toFixed(1)}</td>;
+              })}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</BaseLayout>

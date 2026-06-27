@@ -1,4 +1,10 @@
 ---
+import type { Lang } from '../i18n/translations';
+import { useTranslations } from '../i18n/utils';
+
+interface Props { lang?: Lang; }
+const { lang = 'en' } = Astro.props;
+const t = useTranslations(lang);
 ---
 
 <section
@@ -9,123 +15,94 @@
   <div class="flex flex-wrap items-start justify-between gap-4">
     <div>
       <h2 id="calc-heading" class="font-display text-xl font-semibold text-(--color-ink) sm:text-2xl">
-        Calculate your BMI
+        {t('calc.heading')}
       </h2>
-      <p class="mt-1 text-sm text-(--color-body)">Sliders + precise inputs · instant sync</p>
+      <p class="mt-1 text-sm text-(--color-body)">{t('calc.subheading')}</p>
     </div>
     <div class="flex items-center gap-3">
-      <span class="text-xs font-medium uppercase tracking-wide text-(--color-mute)">Units</span>
-      <button
-        type="button"
-        id="unit-toggle"
-        role="switch"
-        aria-checked="false"
-        aria-label="Switch between metric and US units"
-        data-units="metric"
-        class="unit-switch relative h-10 w-[5.5rem] rounded-full bg-(--color-hairline) p-1 transition"
-      >
-        <span class="absolute left-2 top-1/2 -translate-y-1/2 text-[10px] font-semibold text-(--color-body)">kg</span>
-        <span class="absolute right-2 top-1/2 -translate-y-1/2 text-[10px] font-semibold text-(--color-body)">lb</span>
-        <span
-          id="unit-knob"
-          class="unit-knob block h-8 w-[2.6rem] rounded-full bg-(--color-accent) shadow-md transition-transform"
-        ></span>
-      </button>
+      <span class="text-xs font-medium uppercase tracking-wide text-(--color-mute)">{t('calc.units')}</span>
+      {/* 3-state unit toggle: metric / us / stone */}
+      <div class="flex rounded-xl border border-(--color-hairline) bg-(--color-canvas) overflow-hidden text-xs font-semibold">
+        <button type="button" id="unit-metric" data-unit="metric" class="unit-tab px-3 py-2 transition" aria-pressed="true">kg</button>
+        <button type="button" id="unit-us"     data-unit="us"     class="unit-tab px-3 py-2 transition border-x border-(--color-hairline)" aria-pressed="false">lb</button>
+        <button type="button" id="unit-stone"  data-unit="stone"  class="unit-tab px-3 py-2 transition" aria-pressed="false">st</button>
+      </div>
     </div>
   </div>
 
   <div class="mt-4 flex flex-wrap gap-2" role="group" aria-label="Quick presets">
-    <button type="button" data-preset="average" class="preset-chip">Average (BMI ~22)</button>
-    <button type="button" data-preset="athlete" class="preset-chip">Athletic build</button>
+    <button type="button" data-preset="average" class="preset-chip">{t('calc.preset.avg')}</button>
+    <button type="button" data-preset="athlete" class="preset-chip">{t('calc.preset.ath')}</button>
   </div>
 
   <div class="mt-4 flex flex-wrap gap-4 rounded-xl bg-(--color-canvas) px-4 py-3 text-sm">
     <div>
-      <span class="text-(--color-mute)">Height</span>
+      <span class="text-(--color-mute)">{t('calc.height')}</span>
       <p id="display-height" class="font-semibold tabular-nums text-(--color-ink)">—</p>
     </div>
     <div>
-      <span class="text-(--color-mute)">Weight</span>
+      <span class="text-(--color-mute)">{t('calc.weight')}</span>
       <p id="display-weight" class="font-semibold tabular-nums text-(--color-ink)">—</p>
     </div>
   </div>
 
   <div class="mt-6 grid gap-4 sm:grid-cols-2">
     <label class="block">
-      <span class="text-sm font-medium text-(--color-body)">Age (optional)</span>
+      <span class="text-sm font-medium text-(--color-body)">{t('calc.age')}</span>
       <input
-        type="number"
-        id="age"
-        min="2"
-        max="120"
-        placeholder="25"
-        autocomplete="off"
+        type="number" id="age" min="2" max="120" placeholder="25" autocomplete="off"
         class="mt-1 w-full rounded-xl border border-(--color-hairline) bg-(--color-canvas) px-4 py-3 outline-none focus:border-(--color-accent) focus:ring-2 focus:ring-(--color-accent)/20"
       />
     </label>
     <fieldset class="block">
-      <legend class="text-sm font-medium text-(--color-body)">Gender (optional)</legend>
+      <legend class="text-sm font-medium text-(--color-body)">{t('calc.gender')}</legend>
       <div class="mt-2 flex gap-2">
         <label class="flex flex-1 cursor-pointer items-center justify-center rounded-xl border border-(--color-hairline) px-3 py-3 has-checked:border-(--color-accent) has-checked:bg-(--color-accent)/10">
           <input type="radio" name="gender" value="female" class="sr-only" />
-          <span class="text-sm">Female</span>
+          <span class="text-sm">{t('calc.female')}</span>
         </label>
         <label class="flex flex-1 cursor-pointer items-center justify-center rounded-xl border border-(--color-hairline) px-3 py-3 has-checked:border-(--color-accent) has-checked:bg-(--color-accent)/10">
           <input type="radio" name="gender" value="male" class="sr-only" checked />
-          <span class="text-sm">Male</span>
+          <span class="text-sm">{t('calc.male')}</span>
         </label>
       </div>
     </fieldset>
   </div>
 
+  {/* ── Metric inputs ── */}
   <div id="height-metric" class="mt-6 space-y-6">
     <div>
       <div class="flex items-center justify-between gap-2">
-        <label for="height-cm" class="text-sm font-medium text-(--color-body)">Height (cm)</label>
+        <label for="height-cm" class="text-sm font-medium text-(--color-body)">{t('calc.height.cm')}</label>
         <div class="flex gap-1">
           <button type="button" data-nudge="height-cm" data-delta="-1" class="nudge-btn" aria-label="Decrease height">−</button>
-          <button type="button" data-nudge="height-cm" data-delta="1" class="nudge-btn" aria-label="Increase height">+</button>
+          <button type="button" data-nudge="height-cm" data-delta="1"  class="nudge-btn" aria-label="Increase height">+</button>
         </div>
       </div>
       <input type="range" id="height-cm-range" min="100" max="250" value="170" class="bmi-range mt-2" />
-      <input
-        type="number"
-        id="height-cm"
-        min="100"
-        max="250"
-        value="170"
-        autocomplete="off"
-        class="mt-2 w-full rounded-xl border border-(--color-hairline) bg-(--color-canvas) px-4 py-2 text-lg tabular-nums outline-none focus:border-(--color-accent)"
-      />
+      <input type="number" id="height-cm" min="100" max="250" value="170" autocomplete="off"
+        class="mt-2 w-full rounded-xl border border-(--color-hairline) bg-(--color-canvas) px-4 py-2 text-lg tabular-nums outline-none focus:border-(--color-accent)" />
     </div>
     <div>
       <div class="flex items-center justify-between gap-2">
-        <label for="weight-kg" class="text-sm font-medium text-(--color-body)">Weight (kg)</label>
+        <label for="weight-kg" class="text-sm font-medium text-(--color-body)">{t('calc.weight.kg')}</label>
         <div class="flex gap-1">
-          <button type="button" data-nudge="weight-kg" data-delta="-0.5" class="nudge-btn">−0.5</button>
-          <button type="button" data-nudge="weight-kg" data-delta="0.5" class="nudge-btn">+0.5</button>
-          <button type="button" data-nudge="weight-kg" data-delta="1" class="nudge-btn">+1</button>
+          <button type="button" data-nudge="weight-kg" data-delta="-0.1" class="nudge-btn">−0.1</button>
+          <button type="button" data-nudge="weight-kg" data-delta="0.1"  class="nudge-btn">+0.1</button>
         </div>
       </div>
       <input type="range" id="weight-kg-range" min="30" max="350" step="0.5" value="70" class="bmi-range mt-2" />
-      <input
-        type="number"
-        id="weight-kg"
-        min="30"
-        max="400"
-        step="0.1"
-        value="70"
-        autocomplete="off"
-        class="mt-2 w-full rounded-xl border border-(--color-hairline) bg-(--color-canvas) px-4 py-2 text-lg tabular-nums outline-none focus:border-(--color-accent)"
-      />
+      <input type="number" id="weight-kg" min="30" max="400" step="0.1" value="70" autocomplete="off"
+        class="mt-2 w-full rounded-xl border border-(--color-hairline) bg-(--color-canvas) px-4 py-2 text-lg tabular-nums outline-none focus:border-(--color-accent)" />
     </div>
   </div>
 
+  {/* ── US (lb/ft/in) inputs ── */}
   <div id="height-us" class="mt-6 hidden space-y-6">
     <div class="grid gap-4 sm:grid-cols-2">
       <div>
         <div class="flex items-center justify-between">
-          <label for="height-ft" class="text-sm font-medium text-(--color-body)">Feet</label>
+          <label for="height-ft" class="text-sm font-medium text-(--color-body)">{t('calc.height.ft')}</label>
           <button type="button" data-nudge="height-ft" data-delta="-1" class="nudge-btn">−</button>
         </div>
         <input type="range" id="height-ft-range" min="4" max="9" value="5" class="bmi-range mt-2" />
@@ -133,7 +110,7 @@
       </div>
       <div>
         <div class="flex items-center justify-between">
-          <label for="height-in" class="text-sm font-medium text-(--color-body)">Inches</label>
+          <label for="height-in" class="text-sm font-medium text-(--color-body)">{t('calc.height.in')}</label>
           <button type="button" data-nudge="height-in" data-delta="1" class="nudge-btn">+</button>
         </div>
         <input type="range" id="height-in-range" min="0" max="11" value="10" class="bmi-range mt-2" />
@@ -142,39 +119,90 @@
     </div>
     <div>
       <div class="flex items-center justify-between gap-2">
-        <label for="weight-lb" class="text-sm font-medium text-(--color-body)">Weight (lb)</label>
+        <label for="weight-lb" class="text-sm font-medium text-(--color-body)">{t('calc.weight.lb')}</label>
         <div class="flex gap-1">
           <button type="button" data-nudge="weight-lb" data-delta="-1" class="nudge-btn">−1</button>
-          <button type="button" data-nudge="weight-lb" data-delta="1" class="nudge-btn">+1</button>
-          <button type="button" data-nudge="weight-lb" data-delta="5" class="nudge-btn">+5</button>
+          <button type="button" data-nudge="weight-lb" data-delta="1"  class="nudge-btn">+1</button>
+          <button type="button" data-nudge="weight-lb" data-delta="5"  class="nudge-btn">+5</button>
         </div>
       </div>
       <input type="range" id="weight-lb-range" min="80" max="880" step="0.5" value="160" class="bmi-range mt-2" />
-      <input
-        type="number"
-        id="weight-lb"
-        min="80"
-        max="900"
-        step="0.1"
-        value="160"
-        autocomplete="off"
-        class="mt-2 w-full rounded-xl border border-(--color-hairline) bg-(--color-canvas) px-4 py-2 text-lg tabular-nums"
-      />
+      <input type="number" id="weight-lb" min="80" max="900" step="0.1" value="160" autocomplete="off"
+        class="mt-2 w-full rounded-xl border border-(--color-hairline) bg-(--color-canvas) px-4 py-2 text-lg tabular-nums" />
     </div>
   </div>
 
+  {/* ── Stone (UK) inputs ── */}
+  <div id="height-stone" class="mt-6 hidden space-y-6">
+    <div class="grid gap-4 sm:grid-cols-2">
+      <div>
+        <div class="flex items-center justify-between">
+          <label for="height-ft-st" class="text-sm font-medium text-(--color-body)">{t('calc.height.ft')}</label>
+          <button type="button" data-nudge="height-ft-st" data-delta="-1" class="nudge-btn">−</button>
+        </div>
+        <input type="range" id="height-ft-st-range" min="4" max="9" value="5" class="bmi-range mt-2" />
+        <input type="number" id="height-ft-st" min="4" max="9" value="5" autocomplete="off" class="mt-2 w-full rounded-xl border border-(--color-hairline) bg-(--color-canvas) px-4 py-2 text-lg" />
+      </div>
+      <div>
+        <div class="flex items-center justify-between">
+          <label for="height-in-st" class="text-sm font-medium text-(--color-body)">{t('calc.height.in')}</label>
+          <button type="button" data-nudge="height-in-st" data-delta="1" class="nudge-btn">+</button>
+        </div>
+        <input type="range" id="height-in-st-range" min="0" max="11" value="10" class="bmi-range mt-2" />
+        <input type="number" id="height-in-st" min="0" max="11" value="10" autocomplete="off" class="mt-2 w-full rounded-xl border border-(--color-hairline) bg-(--color-canvas) px-4 py-2 text-lg" />
+      </div>
+    </div>
+    <div>
+      <div class="flex items-center justify-between gap-2">
+        <label class="text-sm font-medium text-(--color-body)">{t('calc.height.st')}</label>
+        <div class="flex gap-1">
+          <button type="button" data-nudge="weight-st" data-delta="-1" class="nudge-btn">−1st</button>
+          <button type="button" data-nudge="weight-st" data-delta="1"  class="nudge-btn">+1st</button>
+        </div>
+      </div>
+      <div class="mt-2 grid grid-cols-2 gap-2">
+        <div>
+          <label for="weight-st" class="text-xs text-(--color-mute)">Stone</label>
+          <input type="range" id="weight-st-range" min="4" max="60" value="11" class="bmi-range mt-1" />
+          <input type="number" id="weight-st" min="4" max="60" value="11" autocomplete="off"
+            class="mt-1 w-full rounded-xl border border-(--color-hairline) bg-(--color-canvas) px-4 py-2 text-lg tabular-nums" />
+        </div>
+        <div>
+          <label for="weight-stlb" class="text-xs text-(--color-mute)">{t('calc.weight.stlb')}</label>
+          <input type="range" id="weight-stlb-range" min="0" max="13" value="0" class="bmi-range mt-1" />
+          <input type="number" id="weight-stlb" min="0" max="13" value="0" autocomplete="off"
+            class="mt-1 w-full rounded-xl border border-(--color-hairline) bg-(--color-canvas) px-4 py-2 text-lg tabular-nums" />
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {/* ── Optional waist input ── */}
+  <div class="mt-5">
+    <label for="waist-cm" class="text-xs font-medium text-(--color-mute)">{t('waist.label')}</label>
+    <div class="mt-1 flex items-center gap-2">
+      <input type="number" id="waist-cm" min="40" max="200" placeholder="e.g. 85" autocomplete="off"
+        class="w-32 rounded-xl border border-(--color-hairline) bg-(--color-canvas) px-3 py-2 text-sm tabular-nums outline-none focus:border-(--color-accent)" />
+      <span id="waist-risk" class="text-sm font-medium"></span>
+    </div>
+  </div>
+
+  {/* ── Body Visualization ── */}
   <div class="mt-6">
-    <h3 class="text-sm font-medium text-(--color-body) mb-1">Your Body Visualization <span class="text-[10px] text-(--color-mute)">(live 3D model • drag to rotate • updates with height &amp; weight)</span></h3>
-    <div id="body-model-container" class="mx-auto relative overflow-hidden rounded-2xl border border-(--color-hairline) bg-(--color-canvas)" style="width:320px; height:400px;">
-      <canvas id="body-canvas" width="320" height="400" class="block touch-none" style="width:320px; height:400px;"></canvas>
+    <h3 class="text-sm font-medium text-(--color-body) mb-1">
+      {t('calc.viz.label')} <span class="text-[10px] text-(--color-mute)">({t('calc.viz.sub')})</span>
+    </h3>
+    <div id="body-model-container" class="mx-auto relative overflow-hidden rounded-2xl border border-(--color-hairline) bg-(--color-canvas)" style="width:min(320px,100%); aspect-ratio:320/420;">
+      <canvas id="body-canvas" width="320" height="420" class="block w-full h-full" style="display:block;"></canvas>
     </div>
     <p id="body-status" class="text-center text-xs text-(--color-mute) mt-1"></p>
   </div>
 
+  {/* ── Results panel ── */}
   <div id="result-panel" class="mt-8 hidden">
     <div class="flex flex-wrap items-end justify-between gap-4">
       <div>
-        <p class="text-sm uppercase tracking-wide text-(--color-mute)">Your BMI</p>
+        <p class="text-sm uppercase tracking-wide text-(--color-mute) print-brand">{t('result.your_bmi')}</p>
         <p id="bmi-value" class="font-display text-5xl font-bold tabular-nums text-(--color-ink)">—</p>
       </div>
       <span id="bmi-category" class="rounded-full px-4 py-1.5 text-sm font-semibold text-white"></span>
@@ -182,10 +210,10 @@
 
     <div class="relative mt-6 h-4 overflow-hidden rounded-full bg-(--color-hairline)">
       <div class="absolute inset-0 flex">
-        <div class="h-full w-[18.5%] bg-(--color-under)"></div>
-        <div class="h-full w-[6.4%] bg-(--color-normal)"></div>
-        <div class="h-full w-[5%] bg-(--color-over)"></div>
-        <div class="h-full flex-1 bg-(--color-obese)"></div>
+        <div class="h-full w-1/4 bg-(--color-under)"></div>
+        <div class="h-full w-1/4 bg-(--color-normal)"></div>
+        <div class="h-full w-1/4 bg-(--color-over)"></div>
+        <div class="h-full w-1/4 bg-(--color-obese)"></div>
       </div>
       <div
         id="bmi-marker"
@@ -197,13 +225,66 @@
       <span>16</span><span>18.5</span><span>25</span><span>30</span><span>40+</span>
     </div>
 
+    {/* Body fat estimate (shown when age is entered) */}
+    <div id="bf-panel" class="mt-4 hidden flex items-center gap-3 rounded-xl bg-(--color-canvas) px-4 py-3">
+      <div>
+        <p class="text-xs text-(--color-mute)">{t('bf.label')}</p>
+        <p id="bf-value" class="font-semibold text-lg tabular-nums text-(--color-ink)">—</p>
+      </div>
+      <p class="text-[10px] text-(--color-mute) ml-auto">{t('bf.note')}</p>
+    </div>
+
     <ul id="result-details" class="mt-6 space-y-2 text-sm text-(--color-body)"></ul>
 
-    <button type="button" id="copy-result" class="mt-4 text-sm font-medium text-(--color-link) hover:underline">
-      Copy result link
-    </button>
+    <div class="mt-4 flex flex-wrap gap-3">
+      <button type="button" id="copy-result" class="text-sm font-medium text-(--color-link) hover:underline">
+        {t('result.copy')}
+      </button>
+      <button type="button" id="print-result" class="text-sm font-medium text-(--color-mute) hover:text-(--color-ink) hover:underline print-hide">
+        {t('print.btn')}
+      </button>
+    </div>
+
+    <div id="share-panel" class="hidden mt-5 flex flex-wrap gap-2">
+      <a id="share-twitter" data-share="twitter" href="#" target="_blank" rel="noopener"
+        class="inline-flex items-center gap-1.5 rounded-full border border-(--color-hairline) bg-(--color-canvas) px-3 py-1.5 text-xs font-medium text-(--color-body) hover:border-(--color-accent) hover:text-(--color-ink) transition">
+        {t('result.share_x')}
+      </a>
+      <a id="share-whatsapp" data-share="whatsapp" href="#" target="_blank" rel="noopener"
+        class="inline-flex items-center gap-1.5 rounded-full border border-(--color-hairline) bg-(--color-canvas) px-3 py-1.5 text-xs font-medium text-(--color-body) hover:border-(--color-accent) hover:text-(--color-ink) transition">
+        {t('result.share_wa')}
+      </a>
+    </div>
   </div>
 </section>
+
+{/* BMI History panel */}
+<div id="history-panel" class="hidden mt-6 rounded-xl border border-(--color-hairline) bg-(--color-canvas) px-4 py-4">
+  <h3 class="text-sm font-semibold text-(--color-ink) mb-2">{t('history.title')}</h3>
+  <ul data-history-list class="space-y-0"></ul>
+  <p class="mt-2 text-[10px] text-(--color-mute)">{t('history.stored')}</p>
+</div>
+
+{/* Pass i18n strings to the client-side calculator */}
+<script is:inline define:vars={{
+  i18nStrings: {
+    healthy_range:  useTranslations(lang)('result.healthy_range'),
+    healthy_wt:     useTranslations(lang)('result.healthy_wt'),
+    ideal:          useTranslations(lang)('result.ideal'),
+    prime:          useTranslations(lang)('result.prime'),
+    screening:      useTranslations(lang)('result.screening'),
+    copy:           useTranslations(lang)('result.copy'),
+    copied:         useTranslations(lang)('result.copied'),
+    share_x:        useTranslations(lang)('result.share_x'),
+    share_wa:       useTranslations(lang)('result.share_wa'),
+    waist_low:      useTranslations(lang)('waist.low'),
+    waist_mod:      useTranslations(lang)('waist.moderate'),
+    waist_high:     useTranslations(lang)('waist.high'),
+    waist_risk_report: useTranslations(lang)('waist.risk_report'),
+  }
+}}>
+  window.__BMI_I18N = i18nStrings;
+</script>
 
 <script>
   import { initBmiCalculator } from '../scripts/bmi-calculator';
@@ -211,11 +292,10 @@
 </script>
 
 <style>
-  .unit-switch[aria-checked='true'] .unit-knob {
-    transform: translateX(2.5rem);
-  }
-  .unit-switch[aria-checked='false'] .unit-knob {
-    transform: translateX(0);
+  .unit-tab { color: var(--color-body); }
+  .unit-tab[aria-pressed="true"] {
+    background: var(--color-accent);
+    color: white;
   }
   .nudge-btn {
     border-radius: 0.5rem;
@@ -251,8 +331,5 @@
     color: var(--color-body);
     transition: border-color 0.15s, color 0.15s;
   }
-  .preset-chip:hover {
-    border-color: var(--color-accent);
-    color: var(--color-ink);
-  }
+  .preset-chip:hover { border-color: var(--color-accent); color: var(--color-ink); }
 </style>

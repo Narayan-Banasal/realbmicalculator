@@ -1,0 +1,20 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import BmiCalculator from '../../components/BmiCalculator.astro';
+const lang = 'fr';
+---
+<BaseLayout title="Calculateur IMC pour Hommes | BMI Result" description="Calculateur d'IMC pour les hommes. Estimez votre masse grasse, votre poids idéal et votre risque selon votre tour de taille.">
+  <div class="mx-auto max-w-4xl px-4 py-10 sm:px-6">
+    <h1 class="font-display text-3xl font-bold text-(--color-ink)">Calculateur IMC pour Hommes</h1>
+    <p class="mt-3 text-lg text-(--color-body)">Les hommes ont tendance à avoir plus de masse musculaire, ce qui peut faire paraître leur IMC plus élevé que ce que reflète leur santé réelle.</p>
+    <div class="mt-8"><BmiCalculator lang={lang} /></div>
+    <article class="mt-12 space-y-4 text-(--color-body)">
+      <h2 class="font-display text-2xl font-semibold text-(--color-ink)">IMC et santé masculine</h2>
+      <ul class="list-disc pl-5 space-y-2">
+        <li>Les hommes musclés peuvent avoir un IMC "surpoids" avec une faible masse grasse.</li>
+        <li>Tour de taille supérieur à 94 cm : risque modéré ; supérieur à 102 cm : risque élevé.</li>
+        <li>À partir de 40 ans, contrôlez aussi tension artérielle, cholestérol et glycémie.</li>
+      </ul>
+    </article>
+  </div>
+</BaseLayout>

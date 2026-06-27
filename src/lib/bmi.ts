@@ -1,4 +1,4 @@
-export type UnitSystem = 'metric' | 'us';
+export type UnitSystem = 'metric' | 'us' | 'stone';
 export type BmiCategoryId = 'underweight' | 'normal' | 'overweight' | 'obese';
 
 export interface BmiCategory {
@@ -72,8 +72,21 @@ export function categorize(bmi: number): BmiCategory {
   return BMI_CATEGORIES[3];
 }
 
-export function markerPosition(bmi: number, min = 15, max = 40): number {
-  return Math.min(100, Math.max(0, ((bmi - min) / (max - min)) * 100));
+export function markerPosition(bmi: number): number {
+  if (bmi < 16) return 0;
+  if (bmi < 18.5) {
+    return ((bmi - 16) / (18.5 - 16)) * 25;
+  }
+  if (bmi < 25) {
+    return 25 + ((bmi - 18.5) / (25 - 18.5)) * 25;
+  }
+  if (bmi < 30) {
+    return 50 + ((bmi - 25) / (30 - 25)) * 25;
+  }
+  if (bmi < 40) {
+    return 75 + ((bmi - 30) / (40 - 30)) * 25;
+  }
+  return 100;
 }
 
 export function healthyWeightRangeKg(heightM: number): { lo: number; hi: number } {
@@ -119,4 +132,28 @@ export function shouldTriggerAlert(bmi: number): 'critical' | 'caution' | null {
   if (bmi >= 35 || bmi < 16) return 'critical';
   if (bmi >= 30 || bmi < 17) return 'caution';
   return null;
+}
+
+/** 1 stone = 14 lb = 6.35029 kg */
+export const STONE_TO_KG = 6.35029;
+
+export function kgToStone(kg: number): { stone: number; lb: number } {
+  const totalLb = kgToLb(kg);
+  const stone = Math.floor(totalLb / 14);
+  const lb = Math.round((totalLb % 14) * 10) / 10;
+  return { stone, lb };
+}
+
+export function stoneToKg(stone: number, lb: number): number {
+  return lbToKg(stone * 14 + lb);
+}
+
+export function calcBmiStone(
+  ft: number, inch: number, stone: number, stLb: number
+): { bmi: number; heightM: number } | null {
+  const totalIn = ft * 12 + inch;
+  const totalLb = stone * 14 + stLb;
+  if (totalIn <= 0 || totalLb <= 0) return null;
+  const heightM = totalIn * 0.0254;
+  return { bmi: (703 * totalLb) / (totalIn * totalIn), heightM };
 }

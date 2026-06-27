@@ -1,0 +1,136 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="BMI vs Body Fat Percentage: Which Matters More?"
+  description="BMI and body fat percentage measure different things. Learn when each metric matters, their limitations, how to measure body fat, and which is more reliable for tracking your health."
+>
+  <div class="mx-auto max-w-3xl px-4 py-12 sm:px-6">
+
+    <p class="text-sm font-medium uppercase tracking-wider text-(--color-accent-deep)">Comparison</p>
+    <h1 class="font-display mt-2 text-4xl font-bold text-(--color-ink)">
+      BMI vs Body Fat Percentage: Which Matters More?
+    </h1>
+    <p class="mt-4 text-lg text-(--color-body)">
+      Both numbers appear on health reports — but they measure very different things and can tell opposite stories about the same person.
+    </p>
+    <div class="mt-4 text-xs text-(--color-mute)">Published: June 2026 · 5 min read</div>
+
+    <div class="mt-10 space-y-8 text-(--color-body) leading-relaxed">
+
+      <section>
+        <h2 class="font-display text-2xl font-semibold text-(--color-ink)">What each measurement tells you</h2>
+        <div class="mt-4 grid gap-4 sm:grid-cols-2">
+          <div class="rounded-xl border border-(--color-hairline) bg-(--color-canvas) p-4">
+            <h3 class="font-semibold text-(--color-ink)">BMI</h3>
+            <ul class="mt-2 text-sm space-y-1 list-disc pl-4">
+              <li>Calculated from height + weight only</li>
+              <li>Cannot distinguish muscle from fat</li>
+              <li>Free, instant, no equipment needed</li>
+              <li>Population-level screening tool</li>
+              <li>Inaccurate for athletes and older adults</li>
+            </ul>
+          </div>
+          <div class="rounded-xl border border-(--color-hairline) bg-(--color-canvas) p-4">
+            <h3 class="font-semibold text-(--color-ink)">Body Fat %</h3>
+            <ul class="mt-2 text-sm space-y-1 list-disc pl-4">
+              <li>Measures actual fat vs lean mass ratio</li>
+              <li>Reflects true body composition</li>
+              <li>Requires a scan, scale, or callipers</li>
+              <li>Individual health tool</li>
+              <li>More accurate for fit individuals</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h2 class="font-display text-2xl font-semibold text-(--color-ink)">Healthy body fat ranges</h2>
+        <div class="mt-4 overflow-x-auto rounded-xl border border-(--color-hairline)">
+          <table class="w-full text-left text-sm">
+            <thead class="bg-(--color-canvas)">
+              <tr>
+                <th class="px-4 py-3 font-semibold text-(--color-ink)">Category</th>
+                <th class="px-4 py-3 font-semibold text-(--color-ink)">Men</th>
+                <th class="px-4 py-3 font-semibold text-(--color-ink)">Women</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-(--color-hairline)">
+              <tr><td class="px-4 py-3">Essential fat</td><td class="px-4 py-3">2–5%</td><td class="px-4 py-3">10–13%</td></tr>
+              <tr><td class="px-4 py-3">Athletes</td><td class="px-4 py-3">6–13%</td><td class="px-4 py-3">14–20%</td></tr>
+              <tr class="bg-(--color-normal)/8"><td class="px-4 py-3 font-medium">Fitness / healthy</td><td class="px-4 py-3">14–17%</td><td class="px-4 py-3">21–24%</td></tr>
+              <tr><td class="px-4 py-3">Acceptable</td><td class="px-4 py-3">18–24%</td><td class="px-4 py-3">25–31%</td></tr>
+              <tr><td class="px-4 py-3">Obese</td><td class="px-4 py-3">≥ 25%</td><td class="px-4 py-3">≥ 32%</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="mt-2 text-xs text-(--color-mute)">Source: American Council on Exercise (ACE). Ranges are approximate guidelines.</p>
+      </section>
+
+      <section>
+        <h2 class="font-display text-2xl font-semibold text-(--color-ink)">The "skinny fat" vs "fit fat" problem</h2>
+        <p class="mt-3">
+          <strong>Skinny fat</strong> (normal-weight obesity): A person can have a healthy BMI of 22 but carry
+          30% body fat, with excess fat stored in the abdomen and around organs. Blood markers — cholesterol,
+          blood sugar, blood pressure — may already be elevated. BMI would classify them as healthy.
+        </p>
+        <p class="mt-3">
+          <strong>Fit fat</strong> (metabolically healthy obesity): A heavyweight athlete with a BMI of 32
+          may have only 18% body fat, excellent cardiovascular fitness, and perfect blood markers. BMI
+          classifies them as obese.
+        </p>
+        <p class="mt-3">
+          These edge cases affect millions of people and are the core reason body fat percentage is considered
+          clinically superior to BMI for individuals (though less practical at population scale).
+        </p>
+      </section>
+
+      <section>
+        <h2 class="font-display text-2xl font-semibold text-(--color-ink)">How to measure body fat</h2>
+        <ul class="mt-3 space-y-3">
+          <li><strong>DEXA scan</strong> — Gold standard. X-ray differentiates bone, fat, and muscle. ~£80–200 per session. Available at specialist clinics.</li>
+          <li><strong>Hydrostatic weighing</strong> — Very accurate; requires submerging in a tank. Available at universities and sports labs.</li>
+          <li><strong>Bioelectrical impedance (BIA)</strong> — Found in smart scales. Fast and accessible; accuracy varies with hydration. Consistent conditions are essential for reliable trends.</li>
+          <li><strong>Skinfold calipers</strong> — Trained technician pinches fat at multiple body sites. Accurate if done correctly; inexpensive.</li>
+          <li><strong>Waist-to-height ratio</strong> — Simple proxy: waist ÷ height. Keep below 0.5 for most adults. Correlates well with visceral fat risk.</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2 class="font-display text-2xl font-semibold text-(--color-ink)">Which should you track?</h2>
+        <p class="mt-3">
+          For most people: <strong>use BMI as a quick screener, then add waist circumference</strong>.
+          If both are in the healthy range, detailed body fat measurement is usually unnecessary.
+        </p>
+        <p class="mt-3">
+          If you exercise seriously, have significant muscle mass, or get a BMI result that doesn't seem
+          to match how you look and feel — body fat percentage (via DEXA or BIA) is worth measuring at
+          least once to calibrate your baseline.
+        </p>
+        <p class="mt-3">
+          For long-term tracking, body fat percentage trends over months are more informative than a
+          single BMI snapshot. But for getting a quick health signal today,
+          <a href="/" class="text-(--color-link) hover:underline">calculating your BMI</a> is the
+          fastest starting point.
+        </p>
+      </section>
+
+    </div>
+
+    <div class="mt-12 rounded-xl border border-(--color-hairline) bg-(--color-canvas) p-5">
+      <p class="text-sm font-semibold text-(--color-ink)">Check your BMI now</p>
+      <p class="mt-1 text-sm text-(--color-body)">Takes 10 seconds. No sign-up required.</p>
+      <a href="/" class="mt-3 inline-block rounded-xl bg-(--color-accent) px-5 py-2.5 text-sm font-semibold text-white hover:opacity-90 transition">
+        Open BMI Calculator →
+      </a>
+    </div>
+
+    <p class="mt-8 text-xs text-(--color-mute)">
+      This article is for educational purposes only and is not a substitute for professional medical advice.
+    </p>
+    <p class="mt-4 text-sm">
+      <a href="/blog" class="text-(--color-link) hover:underline">← All articles</a>
+    </p>
+  </div>
+</BaseLayout>

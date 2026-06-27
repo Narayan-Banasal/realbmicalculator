@@ -1,22 +1,33 @@
 ---
+import { type Lang, languages } from '../i18n/translations';
+import { getLocalizedPath, safeLocalizedPath, useTranslations } from '../i18n/utils';
+
+interface Props { lang?: Lang; }
+const { lang = 'en' } = Astro.props;
+const t = useTranslations(lang);
+
 const nav = [
-  { href: "/", label: "BMI Calculator" },
-  { href: "/bmi-chart", label: "BMI Chart" },
-  { href: "/bmi-calculator-for-women", label: "For Women" },
-  { href: "/bmi-calculator-for-men", label: "For Men" },
-  { href: "/about", label: "About" },
+  { href: getLocalizedPath(lang, '/'),                              label: t('nav.calculator') },
+  { href: getLocalizedPath(lang, '/bmi-chart'),                     label: t('nav.chart') },
+  { href: getLocalizedPath(lang, '/bmi-calculator-for-women'),      label: t('nav.women') },
+  { href: getLocalizedPath(lang, '/bmi-calculator-for-men'),        label: t('nav.men') },
+  { href: '/bmi-calculator-for-children',                           label: t('nav.children') },
+  { href: '/blog',                                                   label: t('nav.blog') },
+  { href: '/about',                                                  label: t('nav.about') },
 ];
 const legal = [
-  { href: "/privacy-policy", label: "Privacy" },
-  { href: "/terms", label: "Terms" },
-  { href: "/contact", label: "Contact" },
+  { href: '/privacy-policy', label: 'Privacy' },
+  { href: '/terms',          label: 'Terms' },
+  { href: '/contact',        label: 'Contact' },
 ];
+
+const langFlags: Record<Lang, string> = { en: '🇺🇸', hi: '🇮🇳', es: '🇪🇸', fr: '🇫🇷' };
 ---
 
 <header class="sticky top-0 z-50 border-b border-(--color-hairline) bg-(--color-surface)/90 backdrop-blur-md">
   <div class="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-4 py-3 sm:px-6">
-    <a href="/" class="font-display text-lg font-semibold tracking-tight text-(--color-ink) sm:text-xl">
-      Real BMI Calculator
+    <a href={getLocalizedPath(lang, '/')} class="font-display text-lg font-semibold tracking-tight text-(--color-ink) sm:text-xl">
+      BMI Result
     </a>
     <nav class="flex flex-wrap items-center gap-1 text-sm" aria-label="Main">
       {nav.map((item) => (
@@ -31,35 +42,81 @@ const legal = [
     <div class="flex items-center gap-2">
       <nav class="hidden items-center gap-1 text-xs sm:flex" aria-label="Legal">
         {legal.map((item) => (
-          <a href={item.href} class="text-(--color-mute) hover:text-(--color-link)">
-            {item.label}
-          </a>
+          <a href={item.href} class="text-(--color-mute) hover:text-(--color-link)">{item.label}</a>
         ))}
       </nav>
+
+      {/* Language switcher */}
+      <div class="relative" id="lang-switcher">
+        <button
+          type="button"
+          id="lang-btn"
+          class="flex items-center gap-1 rounded-lg border border-(--color-hairline) bg-(--color-canvas) px-2.5 py-1.5 text-sm font-medium text-(--color-ink) transition hover:border-(--color-accent)"
+          aria-haspopup="listbox"
+          aria-expanded="false"
+          aria-label="Select language"
+        >
+          <span>{langFlags[lang]}</span>
+          <span class="hidden sm:inline">{languages[lang]}</span>
+          <svg width="10" height="6" viewBox="0 0 10 6" fill="currentColor" class="opacity-60">
+            <path d="M0 0l5 6 5-6z"/>
+          </svg>
+        </button>
+        <ul
+          id="lang-menu"
+          role="listbox"
+          aria-label="Language"
+          class="absolute right-0 top-full z-50 mt-1 hidden min-w-[140px] overflow-hidden rounded-xl border border-(--color-hairline) bg-(--color-surface) shadow-lg"
+        >
+          {(Object.entries(languages) as [Lang, string][]).map(([code, name]) => (
+            <li role="option" aria-selected={code === lang}>
+              <a
+                href={safeLocalizedPath(code, Astro.url.pathname)}
+                class={`flex items-center gap-2 px-4 py-2.5 text-sm hover:bg-(--color-canvas) transition ${code === lang ? 'font-semibold text-(--color-accent)' : 'text-(--color-body)'}`}
+                hreflang={code}
+              >
+                <span>{langFlags[code]}</span>
+                <span>{name}</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+
       <button
         type="button"
         id="theme-toggle"
         class="rounded-lg border border-(--color-hairline) bg-(--color-canvas) px-3 py-1.5 text-sm font-medium text-(--color-ink) transition hover:border-(--color-accent)"
         aria-label="Toggle dark mode"
       >
-        <span class="dark:hidden">Dark</span>
-        <span class="hidden dark:inline">Light</span>
+        <span class="dark:hidden">{t('nav.dark')}</span>
+        <span class="hidden dark:inline">{t('nav.light')}</span>
       </button>
     </div>
   </div>
 </header>
 
 <script>
-  const key = "rbmi-theme";
+  // ── Theme toggle ────────────────────────────────────────────────────────────
+  const key  = 'rbmi-theme';
   const root = document.documentElement;
-
-  const stored = localStorage.getItem(key);
-  if (stored === "dark") {
-    root.classList.add("dark");
-  }
-
-  document.getElementById("theme-toggle")?.addEventListener("click", () => {
-    root.classList.toggle("dark");
-    localStorage.setItem(key, root.classList.contains("dark") ? "dark" : "light");
+  document.getElementById('theme-toggle')?.addEventListener('click', () => {
+    root.classList.toggle('dark');
+    localStorage.setItem(key, root.classList.contains('dark') ? 'dark' : 'light');
   });
+
+  // ── Language dropdown ────────────────────────────────────────────────────────
+  const btn  = document.getElementById('lang-btn');
+  const menu = document.getElementById('lang-menu');
+  if (btn && menu) {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const open = menu.classList.toggle('hidden') === false;
+      btn.setAttribute('aria-expanded', String(open));
+    });
+    document.addEventListener('click', () => {
+      menu.classList.add('hidden');
+      btn.setAttribute('aria-expanded', 'false');
+    });
+  }
 </script>

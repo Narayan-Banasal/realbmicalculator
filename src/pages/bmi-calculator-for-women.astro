@@ -1,24 +1,161 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import BmiCalculator from '../components/BmiCalculator.astro';
+import FaqSection from '../components/FaqSection.astro';
 ---
 
 <BaseLayout
-  title="BMI Calculator for Women"
-  description="BMI calculator for women — same WHO adult formula with guidance on body composition and limitations."
+  title="BMI Calculator for Women — Female Body Mass Index Guide"
+  description="Free BMI calculator for women. Understand healthy BMI ranges for adult females, how hormones and body composition affect BMI interpretation, and what a normal BMI means for women."
 >
   <div class="mx-auto max-w-6xl px-4 py-10 sm:px-6">
-    <h1 class="font-display text-4xl font-bold text-(--color-ink)">BMI Calculator for Women</h1>
-    <p class="mt-4 max-w-2xl text-(--color-body)">
-      The standard adult BMI formula is the same for women and men. Differences in body composition mean
-      BMI alone may not reflect health risk—especially during pregnancy or high muscle mass. Use the
-      calculator below, then discuss results with your clinician if needed.
-    </p>
-    <div class="mt-10 max-w-xl">
+
+    <section class="mb-10 max-w-3xl">
+      <p class="text-sm font-medium uppercase tracking-wider text-(--color-accent-deep)">
+        For Women
+      </p>
+      <h1 class="font-display mt-2 text-4xl font-bold tracking-tight text-(--color-ink) sm:text-5xl">
+        BMI Calculator for Women
+      </h1>
+      <p class="mt-4 text-lg leading-relaxed text-(--color-body)">
+        Calculate your body mass index instantly. The formula is the same for all adults — but understanding
+        what your number means as a woman requires a bit more context.
+      </p>
+    </section>
+
+    <div class="grid gap-10 lg:grid-cols-[1.15fr_0.85fr] lg:gap-12">
       <BmiCalculator />
+
+      <aside class="space-y-6 text-sm leading-relaxed text-(--color-body) lg:sticky lg:top-24 lg:self-start">
+
+        <div class="rounded-xl border border-(--color-hairline) bg-(--color-accent)/5 p-5">
+          <h2 class="font-semibold text-(--color-ink)">BMI ranges for women (adults)</h2>
+          <table class="mt-3 w-full text-left text-sm">
+            <thead>
+              <tr class="border-b border-(--color-hairline) text-(--color-mute)">
+                <th class="py-2 pr-2">Category</th>
+                <th class="py-2">BMI (kg/m²)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="border-b border-(--color-hairline)/60"><td class="py-2">Underweight</td><td>&lt; 18.5</td></tr>
+              <tr class="border-b border-(--color-hairline)/60"><td class="py-2">Normal</td><td>18.5 – 24.9</td></tr>
+              <tr class="border-b border-(--color-hairline)/60"><td class="py-2">Overweight</td><td>25 – 29.9</td></tr>
+              <tr><td class="py-2">Obese</td><td>≥ 30</td></tr>
+            </tbody>
+          </table>
+          <p class="mt-3 text-xs text-(--color-mute)">Source: WHO. Thresholds are the same for women and men.</p>
+        </div>
+
+        <div class="rounded-xl border border-(--color-hairline) bg-(--color-canvas) p-5 space-y-2">
+          <h2 class="font-semibold text-(--color-ink)">Average BMI for women by age (US)</h2>
+          <table class="mt-2 w-full text-left text-xs">
+            <thead>
+              <tr class="border-b border-(--color-hairline) text-(--color-mute)">
+                <th class="py-1.5 pr-2">Age group</th>
+                <th class="py-1.5">Avg BMI</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="border-b border-(--color-hairline)/60"><td class="py-1.5">20–39</td><td>26.8</td></tr>
+              <tr class="border-b border-(--color-hairline)/60"><td class="py-1.5">40–59</td><td>28.7</td></tr>
+              <tr><td class="py-1.5">60+</td><td>28.2</td></tr>
+            </tbody>
+          </table>
+          <p class="text-xs text-(--color-mute)">Source: CDC NHANES data. Average ≠ healthy — use it only for context.</p>
+        </div>
+
+        <p>
+          <strong class="text-(--color-ink)">Medical disclaimer:</strong> This tool is not a substitute for
+          professional medical advice, diagnosis, or treatment. BMI is a screening measure and does not
+          measure body fat directly.
+        </p>
+      </aside>
     </div>
-    <p class="mt-8 text-sm text-(--color-body)">
-      <a href="/" class="text-(--color-link) hover:underline">← Main BMI calculator</a>
-    </p>
+
+    <article class="prose-section mx-auto mt-16 max-w-3xl space-y-8 text-(--color-body)">
+
+      <section>
+        <h2 class="font-display text-2xl font-semibold text-(--color-ink)">
+          What is a healthy BMI for women?
+        </h2>
+        <p class="mt-3">
+          The WHO defines a healthy BMI range as <strong>18.5 to 24.9 kg/m²</strong> for all adults, regardless
+          of sex. However, women naturally have a higher body-fat percentage than men at the same BMI — typically
+          6–11 percentage points more — due to hormonal differences, breast tissue, and reproductive organs.
+        </p>
+        <p class="mt-3">
+          This means two women with the same BMI of 22 can have meaningfully different body compositions depending
+          on their age, fitness level, and genetics. BMI is best used as a starting point rather than a
+          definitive health score.
+        </p>
+      </section>
+
+      <section>
+        <h2 class="font-display text-2xl font-semibold text-(--color-ink)">
+          How hormones affect BMI interpretation
+        </h2>
+        <p class="mt-3">
+          Oestrogen promotes fat storage in the hips, thighs, and breasts. This distribution (called
+          gynoid or pear-shaped fat) is generally less metabolically harmful than abdominal (android or
+          apple-shaped) fat. After menopause, oestrogen levels drop and fat often redistributes toward
+          the abdomen, raising cardiovascular and metabolic risk — even with no change in BMI.
+        </p>
+        <p class="mt-3">
+          Polycystic ovary syndrome (PCOS) and thyroid disorders can also affect weight independently of
+          diet and exercise, making BMI less reliable as a solo metric.
+        </p>
+      </section>
+
+      <section>
+        <h2 class="font-display text-2xl font-semibold text-(--color-ink)">
+          BMI and pregnancy
+        </h2>
+        <p class="mt-3">
+          BMI is <strong>not used during pregnancy</strong>. Weight gain is expected and healthy — typically
+          11–16 kg for women with a normal pre-pregnancy BMI. Your pre-pregnancy BMI helps doctors set
+          personalised weight-gain targets, but your obstetrician will track progress using dedicated
+          pregnancy charts, not standard BMI thresholds.
+        </p>
+      </section>
+
+      <section>
+        <h2 class="font-display text-2xl font-semibold text-(--color-ink)">
+          Limitations of BMI for women
+        </h2>
+        <ul class="mt-3 list-disc pl-5 space-y-2">
+          <li><strong>Muscle mass:</strong> Women who strength-train may have higher BMI despite healthy body fat.</li>
+          <li><strong>Menopause:</strong> Fat redistribution raises health risk without necessarily changing BMI.</li>
+          <li><strong>Ethnicity:</strong> Asian women may face elevated metabolic risk at BMI levels below 25.</li>
+          <li><strong>Bone density:</strong> Denser bones weigh more — BMI doesn't distinguish bone from fat.</li>
+          <li><strong>Age:</strong> Body composition changes with age; a BMI of 22 at 25 differs from 22 at 65.</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2 class="font-display text-2xl font-semibold text-(--color-ink)">
+          Better alternatives for women
+        </h2>
+        <p class="mt-3">
+          Clinicians often pair BMI with:
+        </p>
+        <ul class="mt-2 list-disc pl-5 space-y-1">
+          <li><strong>Waist circumference</strong> — risk increases above 80 cm (31.5 in) for women</li>
+          <li><strong>Waist-to-height ratio</strong> — keep below 0.5 for most adults</li>
+          <li><strong>Body fat percentage</strong> — measured via DEXA scan, bioelectrical impedance, or skinfold calipers</li>
+          <li><strong>Blood markers</strong> — cholesterol, blood glucose, blood pressure alongside weight</li>
+        </ul>
+      </section>
+
+    </article>
+
+    <div class="mx-auto mt-16 max-w-3xl">
+      <p class="mb-6 text-sm text-(--color-body)">
+        <a href="/" class="text-(--color-link) hover:underline">← Main BMI calculator</a>
+        &nbsp;·&nbsp;
+        <a href="/bmi-calculator-for-men" class="text-(--color-link) hover:underline">BMI for men →</a>
+      </p>
+    </div>
+
   </div>
 </BaseLayout>

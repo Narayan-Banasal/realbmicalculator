@@ -1,0 +1,83 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ProsePage from '../components/ProsePage.astro';
+
+const embedUrl = 'https://bmiresult.com';
+const iframeCode = `<iframe
+  src="${embedUrl}"
+  width="420"
+  height="680"
+  frameborder="0"
+  title="BMI Calculator"
+  loading="lazy"
+  style="border:none;border-radius:16px;box-shadow:0 2px 20px rgba(0,0,0,0.10);"
+></iframe>`;
+---
+
+<BaseLayout
+  title="Embed BMI Calculator on Your Website — Free Widget"
+  description="Add a free, instant BMI calculator to your website or blog with a simple copy-paste iframe. No JavaScript required, works on any platform."
+>
+  <ProsePage title="Embed BMI Calculator" lead="Free · Instant · No JavaScript required on your end">
+
+    <p>
+      You can embed the BMI Result on your website, blog, or health platform with a single
+      copy-paste snippet. The calculator works inside any iframe — no extra JavaScript needed on your site.
+    </p>
+
+    <h2 class="font-display text-xl font-semibold text-(--color-ink)">Copy the embed code</h2>
+
+    <div class="relative mt-4 rounded-xl bg-(--color-canvas) border border-(--color-hairline) overflow-hidden">
+      <pre class="overflow-x-auto p-4 text-xs leading-relaxed text-(--color-body) whitespace-pre-wrap"><code id="embed-code">{iframeCode}</code></pre>
+      <button
+        id="copy-embed"
+        class="absolute top-3 right-3 rounded-lg bg-(--color-accent) px-3 py-1.5 text-xs font-semibold text-white hover:opacity-90 transition"
+      >
+        Copy
+      </button>
+    </div>
+
+    <h2 class="font-display text-xl font-semibold text-(--color-ink) mt-6">Preview</h2>
+    <p class="text-sm text-(--color-mute)">This is exactly what your visitors will see:</p>
+    <div class="mt-4 overflow-hidden rounded-2xl border border-(--color-hairline)">
+      <iframe
+        src={embedUrl}
+        width="420"
+        height="680"
+        frameborder="0"
+        title="BMI Calculator preview"
+        loading="lazy"
+        class="block max-w-full"
+        style="border:none;"
+      ></iframe>
+    </div>
+
+    <h2 class="font-display text-xl font-semibold text-(--color-ink) mt-6">Customisation options</h2>
+    <p>Adjust these attributes to fit your layout:</p>
+    <ul class="list-disc pl-5 space-y-1 text-sm">
+      <li><code class="bg-(--color-canvas) px-1 rounded">width</code> — change to any value (e.g. <code class="bg-(--color-canvas) px-1 rounded">100%</code> for full-width)</li>
+      <li><code class="bg-(--color-canvas) px-1 rounded">height</code> — <code class="bg-(--color-canvas) px-1 rounded">680</code> shows the full calculator; <code class="bg-(--color-canvas) px-1 rounded">420</code> shows only the inputs</li>
+      <li>Add <code class="bg-(--color-canvas) px-1 rounded">?units=us</code> to the src URL to default to lb/ft</li>
+    </ul>
+
+    <h2 class="font-display text-xl font-semibold text-(--color-ink) mt-6">Attribution</h2>
+    <p>
+      Embedding is free. We only ask that you add a visible link near the widget:
+      <em>"BMI calculator by <a href="https://bmiresult.com" class="text-(--color-link)">bmiresult.com</a>"</em>.
+    </p>
+
+    <p class="mt-4 text-sm">
+      <a href="/" class="text-(--color-link) hover:underline">← Back to BMI Calculator</a>
+    </p>
+  </ProsePage>
+</BaseLayout>
+
+<script>
+  document.getElementById('copy-embed')?.addEventListener('click', async () => {
+    const code = document.getElementById('embed-code')?.textContent ?? '';
+    await navigator.clipboard.writeText(code);
+    const btn = document.getElementById('copy-embed')!;
+    btn.textContent = '✓ Copied!';
+    setTimeout(() => { btn.textContent = 'Copy'; }, 2000);
+  });
+</script>

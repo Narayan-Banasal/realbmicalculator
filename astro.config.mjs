@@ -5,13 +5,20 @@ import cloudflare from '@astrojs/cloudflare';
 import sitemap from '@astrojs/sitemap';
 
 export default defineConfig({
-  site: 'https://realbmicalculator.com',
+  site: 'https://bmiresult.com',
   output: 'static',
+  i18n: {
+    defaultLocale: 'en',
+    locales: ['en', 'hi', 'es', 'fr'],
+    routing: {
+      prefixDefaultLocale: false, // English stays at /, others get /hi/ /es/ /fr/
+    },
+  },
   vite: {
     plugins: [tailwindcss()],
   },
   adapter: cloudflare({
     imageService: 'compile',
   }),
-  integrations: [sitemap()],
+  integrations: [sitemap({ i18n: { defaultLocale: 'en', locales: { en: 'en-US', hi: 'hi-IN', es: 'es-ES', fr: 'fr-FR' } } })],
 });

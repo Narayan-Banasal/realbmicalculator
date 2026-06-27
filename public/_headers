@@ -1,7 +1,25 @@
-# Video fix: noindex all *.pages.dev until custom domain is live (duplicate content)
+# Cloudflare Pages headers config
 # https://developers.cloudflare.com/pages/configuration/headers/
+
+# ── noindex staging deployments ─────────────────────────────────────────────
+# Cloudflare CANNOT change a pages.dev subdomain after project creation.
+# Even though the project is now named "bmiresult", the staging URL is still
+# realbmicalculator.pages.dev permanently. Keep both covered.
+https://bmiresult.pages.dev/*
+  X-Robots-Tag: noindex
+
+https://:version.bmiresult.pages.dev/*
+  X-Robots-Tag: noindex
+
 https://realbmicalculator.pages.dev/*
   X-Robots-Tag: noindex
 
 https://:version.realbmicalculator.pages.dev/*
   X-Robots-Tag: noindex
+
+# ── Security headers (all environments) ─────────────────────────────────────
+/*
+  X-Frame-Options: SAMEORIGIN
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=()

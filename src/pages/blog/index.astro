@@ -1,0 +1,56 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="BMI Blog — Body Mass Index Guides, Tips & Health Insights"
+  description="Expert articles on BMI, healthy weight, body composition, and what your BMI number really means for your health. Written for adults who want clear, evidence-based guidance."
+>
+  <div class="mx-auto max-w-4xl px-4 py-12 sm:px-6">
+    <h1 class="font-display text-4xl font-bold text-(--color-ink)">BMI Health Blog</h1>
+    <p class="mt-4 text-(--color-body) max-w-2xl">
+      Clear, evidence-based articles on body mass index, healthy weight, and what the numbers really mean.
+    </p>
+
+    <div class="mt-12 grid gap-8 sm:grid-cols-2">
+
+      <a href="/blog/what-is-a-healthy-bmi" class="group block rounded-2xl border border-(--color-hairline) bg-(--color-surface) p-6 hover:border-(--color-accent) hover:shadow-md transition">
+        <p class="text-xs font-medium uppercase tracking-wider text-(--color-accent-deep)">Guide</p>
+        <h2 class="font-display mt-2 text-xl font-semibold text-(--color-ink) group-hover:text-(--color-accent) transition">
+          What Is a Healthy BMI? A Complete Guide for Adults
+        </h2>
+        <p class="mt-3 text-sm text-(--color-body) leading-relaxed">
+          Understanding healthy BMI ranges, what the numbers mean for men and women, and when BMI is — and isn't — a useful health indicator.
+        </p>
+        <span class="mt-4 inline-block text-sm font-medium text-(--color-link)">Read article →</span>
+      </a>
+
+      <a href="/blog/bmi-vs-body-fat" class="group block rounded-2xl border border-(--color-hairline) bg-(--color-surface) p-6 hover:border-(--color-accent) hover:shadow-md transition">
+        <p class="text-xs font-medium uppercase tracking-wider text-(--color-accent-deep)">Comparison</p>
+        <h2 class="font-display mt-2 text-xl font-semibold text-(--color-ink) group-hover:text-(--color-accent) transition">
+          BMI vs Body Fat Percentage: Which Matters More?
+        </h2>
+        <p class="mt-3 text-sm text-(--color-body) leading-relaxed">
+          BMI and body fat percentage both measure weight-related health — but they tell very different stories. Here's when each one matters.
+        </p>
+        <span class="mt-4 inline-block text-sm font-medium text-(--color-link)">Read article →</span>
+      </a>
+
+      <a href="/blog/how-to-lower-bmi" class="group block rounded-2xl border border-(--color-hairline) bg-(--color-surface) p-6 hover:border-(--color-accent) hover:shadow-md transition">
+        <p class="text-xs font-medium uppercase tracking-wider text-(--color-accent-deep)">How-to</p>
+        <h2 class="font-display mt-2 text-xl font-semibold text-(--color-ink) group-hover:text-(--color-accent) transition">
+          How to Lower Your BMI: Evidence-Based Steps That Work
+        </h2>
+        <p class="mt-3 text-sm text-(--color-body) leading-relaxed">
+          Practical, evidence-based strategies to reduce BMI sustainably — without crash diets or extreme exercise plans.
+        </p>
+        <span class="mt-4 inline-block text-sm font-medium text-(--color-link)">Read article →</span>
+      </a>
+
+    </div>
+
+    <p class="mt-12 text-sm text-(--color-mute)">
+      <a href="/" class="text-(--color-link) hover:underline">← Back to BMI Calculator</a>
+    </p>
+  </div>
+</BaseLayout>

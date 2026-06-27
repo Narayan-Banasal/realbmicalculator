@@ -1,9 +1,9 @@
 {
-  "name": "realbmicalculator",
+  "name": "bmiresult",
   "type": "module",
   "version": "1.0.0",
   "private": true,
-  "description": "Real BMI Calculator — free body mass index tool for realbmicalculator.com",
+  "description": "BMI Result — free body mass index tool for bmiresult.com",
   "engines": {
     "node": ">=20.0.0"
   },
@@ -14,7 +14,7 @@
     "astro": "astro",
     "check": "astro check",
     "generate-types": "wrangler types",
-    "deploy": "astro build && wrangler pages deploy dist/client --project-name=realbmicalculator --commit-dirty=true",
+    "deploy": "astro build && rm -f .wrangler/deploy/config.json && mv dist/client/wrangler.json dist/client/wrangler.json.bak && wrangler pages deploy dist/client --project-name=bmiresult --commit-dirty=true; mv dist/client/wrangler.json.bak dist/client/wrangler.json",
     "deploy:pages": "npm run deploy"
   },
   "dependencies": {
@@ -23,13 +23,10 @@
     "@tailwindcss/vite": "^4.3.0",
     "astro": "^6.4.4",
     "tailwindcss": "^4.3.0",
-    "three": "^0.184.0",
     "wrangler": "^4.98.0"
   },
   "overrides": {
     "vite": "^7"
   },
-  "devDependencies": {
-    "@types/three": "^0.184.1"
-  }
+  "devDependencies": {}
 }

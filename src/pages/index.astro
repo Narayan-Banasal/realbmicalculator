@@ -5,21 +5,21 @@ import FaqSection from '../components/FaqSection.astro';
 
 const title = 'BMI Calculator — Free Body Mass Index Tool';
 const description =
-  'Free BMI calculator for adults. Instantly calculate body mass index in kg/cm or lb/ft-in. See your category, healthy weight range, and BMI chart. Real BMI Calculator.';
+  'Free BMI calculator for adults. Instantly calculate body mass index in kg/cm or lb/ft-in. See your category, healthy weight range, ideal weight, and BMI chart. BMI Result.';
 ---
 
 <BaseLayout title={title} description={description}>
   <div class="mx-auto max-w-6xl px-4 py-10 sm:px-6 sm:py-14">
     <section class="mb-10 max-w-3xl">
       <p class="text-sm font-medium uppercase tracking-wider text-(--color-accent-deep)">
-        realbmicalculator.com
+        bmiresult.com
       </p>
       <h1 class="font-display mt-2 text-4xl font-bold tracking-tight text-(--color-ink) sm:text-5xl">
         BMI Calculator
       </h1>
       <p class="mt-4 text-lg leading-relaxed text-(--color-body)">
-        Calculate your body mass index in seconds. Drag sliders or type exact values, switch kg ↔ lb instantly,
-        see your 3D body model update live, category, gauge, and health alert.
+        Calculate your body mass index in seconds. Drag sliders or type exact values, switch kg ↔ lb
+        instantly, see your body model update live, category, gauge, and health alert.
       </p>
       <nav class="mt-6 flex flex-wrap gap-3 text-sm" aria-label="Legal and info (visible for AdSense)">
         <a href="/privacy-policy" class="rounded-lg bg-(--color-canvas) px-3 py-1.5 text-(--color-link) ring-1 ring-(--color-hairline)">Privacy Policy</a>
@@ -49,6 +49,44 @@ const description =
             </tbody>
           </table>
         </div>
+
+        {/* Related tools hub */}
+        <div class="rounded-xl border border-(--color-hairline) bg-(--color-canvas) p-5">
+          <h2 class="font-semibold text-(--color-ink) mb-3">Related tools & guides</h2>
+          <ul class="space-y-2 text-sm">
+            <li>
+              <a href="/bmi-chart" class="flex items-center gap-2 text-(--color-link) hover:underline">
+                <span class="text-base">📊</span> BMI Chart by Height & Weight
+              </a>
+            </li>
+            <li>
+              <a href="/bmi-calculator-for-women" class="flex items-center gap-2 text-(--color-link) hover:underline">
+                <span class="text-base">♀️</span> BMI Calculator for Women
+              </a>
+            </li>
+            <li>
+              <a href="/bmi-calculator-for-men" class="flex items-center gap-2 text-(--color-link) hover:underline">
+                <span class="text-base">♂️</span> BMI Calculator for Men
+              </a>
+            </li>
+            <li>
+              <a href="/blog/what-is-a-healthy-bmi" class="flex items-center gap-2 text-(--color-link) hover:underline">
+                <span class="text-base">📖</span> What Is a Healthy BMI?
+              </a>
+            </li>
+            <li>
+              <a href="/blog/bmi-vs-body-fat" class="flex items-center gap-2 text-(--color-link) hover:underline">
+                <span class="text-base">⚖️</span> BMI vs Body Fat %
+              </a>
+            </li>
+            <li>
+              <a href="/blog/how-to-lower-bmi" class="flex items-center gap-2 text-(--color-link) hover:underline">
+                <span class="text-base">📉</span> How to Lower Your BMI
+              </a>
+            </li>
+          </ul>
+        </div>
+
         <p>
           <strong class="text-(--color-ink)">Medical disclaimer:</strong> This tool is not a substitute for
           professional medical advice, diagnosis, or treatment. BMI is a screening measure and does not
@@ -65,26 +103,60 @@ const description =
       <p>
         Body mass index (BMI) is a simple calculation using a person's height and weight. Healthcare
         organizations including the WHO and CDC use BMI categories to screen for weight-related health
-        risks at the population level. It is quick, inexpensive, and useful as a first step—but it has
-        limitations you should understand before drawing conclusions about your personal health.
+        risks at the population level. It is quick, inexpensive, and useful as a first step — but it has
+        known limitations you should understand before drawing conclusions about your personal health.
       </p>
+
       <h2 class="font-display text-2xl font-semibold text-(--color-ink)">How to use this BMI calculator</h2>
       <p>
         Use the unit switch for metric (kg, cm) or US (lb, ft/in) — values convert automatically. Sliders give
         quick exploration; number fields and ± buttons allow precise adjustments (0.5 kg or 1 lb steps). Your
-        BMI updates instantly with category color, healthy weight range, and live 3D body model.
+        BMI updates instantly with category color, healthy weight range, ideal weight (Devine formula), and
+        a live body model.
       </p>
-      <h2 class="font-display text-2xl font-semibold text-(--color-ink)">Limitations of BMI</h2>
+
+      <h2 class="font-display text-2xl font-semibold text-(--color-ink)">Limitations of BMI — What it can't tell you</h2>
       <p>
-        Athletes with high muscle mass may have a high BMI despite low body fat. Older adults may have a
-        normal BMI but elevated fat mass. BMI also does not reflect fat distribution (abdominal fat carries
-        higher metabolic risk). Pregnant women and children require different assessment methods. If your
-        BMI is outside the normal range, consider speaking with a doctor who can evaluate blood work,
-        waist circumference, lifestyle, and family history.
+        BMI is a population-level screening tool, not a personal health diagnosis. It has well-documented
+        limitations that affect millions of people:
       </p>
-      <h2 class="font-display text-2xl font-semibold text-(--color-ink)">Why Real BMI Calculator?</h2>
+      <ul class="list-disc pl-5 space-y-2">
+        <li>
+          <strong>Muscular people:</strong> BMI cannot distinguish muscle from fat. A 180 cm athlete weighing
+          95 kg would have a BMI of 29.3 — "overweight" — regardless of their body fat percentage (which
+          may be under 15%). Up to 40% of people classified as overweight by BMI have healthy metabolic markers.
+        </li>
+        <li>
+          <strong>Ethnicity:</strong> Research shows Asian populations face higher metabolic risk at lower BMI
+          thresholds. The WHO recommends cut-points of 23 (overweight) and 27.5 (obese) for Asian adults —
+          lower than the standard thresholds. Our calculator uses the universal WHO thresholds.
+        </li>
+        <li>
+          <strong>Age:</strong> Older adults (65+) may have a "normal" BMI while carrying excess fat and
+          reduced muscle (sarcopenic obesity). A slightly higher BMI (22–27) may be protective in older adults.
+        </li>
+        <li>
+          <strong>Fat distribution:</strong> BMI ignores where fat is stored. Abdominal visceral fat carries
+          far higher health risk than fat stored in hips and thighs, even at the same BMI.
+        </li>
+        <li>
+          <strong>Pregnancy:</strong> BMI is not applicable during pregnancy. Use pre-pregnancy BMI only for
+          context; your clinician will use dedicated pregnancy growth charts.
+        </li>
+        <li>
+          <strong>Children:</strong> Standard BMI thresholds do not apply to children under 18. Age- and
+          sex-specific BMI percentile charts are used instead.
+        </li>
+      </ul>
       <p>
-        We built Real BMI Calculator to be faster and clearer than cluttered calculator pages: instant
+        <strong>Better alternatives to use alongside BMI:</strong> waist circumference (men: &lt;94 cm / women:
+        &lt;80 cm for lower risk), waist-to-height ratio (&lt;0.5 is a useful rule of thumb), or body fat
+        percentage measured by DEXA, BIA scales, or skinfold calipers.
+      </p>
+
+      <h2 class="font-display text-2xl font-semibold text-(--color-ink)">Why BMI Result?</h2>
+      <p>
+        We built BMI Result to be faster and clearer than cluttered calculator pages: instant
         results, dark mode, mobile-friendly layout, and honest educational content. Whether you are tracking
         fitness progress or learning about body mass index for the first time, you get a focused tool without
         sign-up walls. Explore our <a href="/bmi-chart" class="text-(--color-link) hover:underline">BMI chart</a>,
@@ -93,6 +165,33 @@ const description =
         more context.
       </p>
     </article>
+
+    {/* Sources / Citations — builds E-E-A-T trust */}
+    <aside class="mx-auto mt-10 max-w-3xl rounded-xl border border-(--color-hairline) bg-(--color-canvas) px-5 py-4 text-sm text-(--color-body)">
+      <h2 class="font-semibold text-(--color-ink) mb-2">Sources & references</h2>
+      <ul class="space-y-1 text-xs text-(--color-mute)">
+        <li>
+          <a href="https://www.who.int/news-room/fact-sheets/detail/obesity-and-overweight" target="_blank" rel="noopener" class="hover:text-(--color-link)">
+            WHO — Obesity and Overweight Fact Sheet (2024)
+          </a>
+        </li>
+        <li>
+          <a href="https://www.cdc.gov/bmi/adult-calculator/index.html" target="_blank" rel="noopener" class="hover:text-(--color-link)">
+            CDC — About Adult BMI (2024)
+          </a>
+        </li>
+        <li>
+          <a href="https://www.nejm.org/doi/full/10.1056/NEJMoa021423" target="_blank" rel="noopener" class="hover:text-(--color-link)">
+            Flegal et al., NEJM — Excess Deaths Associated with Underweight, Overweight, and Obesity (2005)
+          </a>
+        </li>
+        <li>
+          <a href="https://www.who.int/publications/i/item/9789241547697" target="_blank" rel="noopener" class="hover:text-(--color-link)">
+            WHO — Waist Circumference and Waist-Hip Ratio: Report of a WHO Expert Consultation (2011)
+          </a>
+        </li>
+      </ul>
+    </aside>
 
     <div class="mx-auto mt-16 max-w-3xl">
       <FaqSection />

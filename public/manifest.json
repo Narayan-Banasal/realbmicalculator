@@ -1,0 +1,21 @@
+{
+  "name": "BMI Result",
+  "short_name": "BMI Calc",
+  "description": "Free BMI calculator — instant results, dark mode, mobile-friendly.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#10b981",
+  "orientation": "portrait",
+  "icons": [
+    { "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ],
+  "screenshots": [
+    {
+      "src": "/images/og-default.png",
+      "sizes": "1200x630",
+      "type": "image/png",
+      "label": "BMI Calculator home screen"
+    }
+  ]
+}

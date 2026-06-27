@@ -1,0 +1,33 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import BmiCalculator from '../../components/BmiCalculator.astro';
+const lang = 'hi';
+---
+<BaseLayout title="BMI चार्ट — ऊंचाई और वजन के अनुसार BMI | BMI Result" description="ऊंचाई और वजन के हिसाब से BMI चार्ट। पुरुष और महिला दोनों के लिए WHO श्रेणियों के साथ।">
+  <div class="mx-auto max-w-4xl px-4 py-10 sm:px-6">
+    <h1 class="font-display text-3xl font-bold text-(--color-ink)">BMI चार्ट</h1>
+    <p class="mt-2 text-(--color-body)">नीचे दिए गए चार्ट में अपनी ऊंचाई और वजन से BMI खोजें।</p>
+    <div class="mt-8"><BmiCalculator lang={lang} /></div>
+    <section class="mt-12 overflow-x-auto rounded-xl border border-(--color-hairline)">
+      <table class="w-full min-w-[500px] text-center text-sm">
+        <thead class="bg-(--color-canvas)">
+          <tr><th class="p-3 text-left">वजन (kg)</th>
+            {[150,160,165,170,175,180,185].map(h => <th class="p-3">{h}cm</th>)}
+          </tr>
+        </thead>
+        <tbody>
+          {[50,60,65,70,75,80,90,100,110,120].map(w => (
+            <tr class="border-t border-(--color-hairline)">
+              <td class="p-3 font-medium text-left">{w} kg</td>
+              {[150,160,165,170,175,180,185].map(h => {
+                const bmi = w / ((h/100)**2);
+                const color = bmi < 18.5 ? 'text-blue-600' : bmi < 25 ? 'text-emerald-600' : bmi < 30 ? 'text-amber-600' : 'text-red-600';
+                return <td class={`p-3 tabular-nums font-semibold ${color}`}>{bmi.toFixed(1)}</td>;
+              })}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </section>
+  </div>
+</BaseLayout>

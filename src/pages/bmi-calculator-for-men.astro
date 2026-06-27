@@ -4,21 +4,171 @@ import BmiCalculator from '../components/BmiCalculator.astro';
 ---
 
 <BaseLayout
-  title="BMI Calculator for Men"
-  description="BMI calculator for men — instant body mass index with athletic and health context."
+  title="BMI Calculator for Men — Male Body Mass Index Guide"
+  description="Free BMI calculator for men. Learn healthy BMI ranges for adult males, how muscle mass skews BMI readings, waist circumference guidelines, and what BMI numbers actually mean for men."
 >
   <div class="mx-auto max-w-6xl px-4 py-10 sm:px-6">
-    <h1 class="font-display text-4xl font-bold text-(--color-ink)">BMI Calculator for Men</h1>
-    <p class="mt-4 max-w-2xl text-(--color-body)">
-      Men with significant muscle mass may register as overweight on BMI despite low body fat. This
-      calculator uses the standard adult formula; pair your result with waist measurement and professional
-      guidance when training or managing weight.
-    </p>
-    <div class="mt-10 max-w-xl">
+
+    <section class="mb-10 max-w-3xl">
+      <p class="text-sm font-medium uppercase tracking-wider text-(--color-accent-deep)">
+        For Men
+      </p>
+      <h1 class="font-display mt-2 text-4xl font-bold tracking-tight text-(--color-ink) sm:text-5xl">
+        BMI Calculator for Men
+      </h1>
+      <p class="mt-4 text-lg leading-relaxed text-(--color-body)">
+        Calculate your BMI instantly. Men who exercise or carry significant muscle mass often get
+        misleading readings — here's what your number actually means.
+      </p>
+    </section>
+
+    <div class="grid gap-10 lg:grid-cols-[1.15fr_0.85fr] lg:gap-12">
       <BmiCalculator />
+
+      <aside class="space-y-6 text-sm leading-relaxed text-(--color-body) lg:sticky lg:top-24 lg:self-start">
+
+        <div class="rounded-xl border border-(--color-hairline) bg-(--color-accent)/5 p-5">
+          <h2 class="font-semibold text-(--color-ink)">BMI ranges for men (adults)</h2>
+          <table class="mt-3 w-full text-left text-sm">
+            <thead>
+              <tr class="border-b border-(--color-hairline) text-(--color-mute)">
+                <th class="py-2 pr-2">Category</th>
+                <th class="py-2">BMI (kg/m²)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="border-b border-(--color-hairline)/60"><td class="py-2">Underweight</td><td>&lt; 18.5</td></tr>
+              <tr class="border-b border-(--color-hairline)/60"><td class="py-2">Normal</td><td>18.5 – 24.9</td></tr>
+              <tr class="border-b border-(--color-hairline)/60"><td class="py-2">Overweight</td><td>25 – 29.9</td></tr>
+              <tr><td class="py-2">Obese</td><td>≥ 30</td></tr>
+            </tbody>
+          </table>
+          <p class="mt-3 text-xs text-(--color-mute)">Source: WHO. Thresholds are the same for men and women.</p>
+        </div>
+
+        <div class="rounded-xl border border-(--color-hairline) bg-(--color-canvas) p-5">
+          <h2 class="font-semibold text-(--color-ink)">Average BMI for men by age (US)</h2>
+          <table class="mt-2 w-full text-left text-xs">
+            <thead>
+              <tr class="border-b border-(--color-hairline) text-(--color-mute)">
+                <th class="py-1.5 pr-2">Age group</th>
+                <th class="py-1.5">Avg BMI</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="border-b border-(--color-hairline)/60"><td class="py-1.5">20–39</td><td>27.5</td></tr>
+              <tr class="border-b border-(--color-hairline)/60"><td class="py-1.5">40–59</td><td>29.2</td></tr>
+              <tr><td class="py-1.5">60+</td><td>28.6</td></tr>
+            </tbody>
+          </table>
+          <p class="text-xs text-(--color-mute) mt-2">Source: CDC NHANES. Average ≠ healthy.</p>
+        </div>
+
+        <div class="rounded-xl border border-(--color-hairline) bg-(--color-canvas) p-5">
+          <h2 class="font-semibold text-(--color-ink) mb-2">Waist size risk thresholds (men)</h2>
+          <ul class="space-y-1 text-xs text-(--color-body)">
+            <li>✅ <strong>&lt; 94 cm (37 in)</strong> — low risk</li>
+            <li>⚠️ <strong>94–102 cm (37–40 in)</strong> — increased risk</li>
+            <li>🚨 <strong>&gt; 102 cm (40 in)</strong> — high risk</li>
+          </ul>
+          <p class="mt-2 text-xs text-(--color-mute)">Source: WHO / NHS guidelines.</p>
+        </div>
+
+        <p>
+          <strong class="text-(--color-ink)">Medical disclaimer:</strong> This tool is not a substitute for
+          professional medical advice. Always consult a qualified healthcare provider about your weight and health.
+        </p>
+      </aside>
     </div>
-    <p class="mt-8 text-sm text-(--color-body)">
-      <a href="/" class="text-(--color-link) hover:underline">← Main BMI calculator</a>
-    </p>
+
+    <article class="prose-section mx-auto mt-16 max-w-3xl space-y-8 text-(--color-body)">
+
+      <section>
+        <h2 class="font-display text-2xl font-semibold text-(--color-ink)">
+          What is a healthy BMI for men?
+        </h2>
+        <p class="mt-3">
+          The WHO healthy range is <strong>18.5 to 24.9 kg/m²</strong> for all adults. At the same BMI,
+          men typically carry 6–11% less body fat than women due to lower oestrogen levels and greater
+          lean muscle mass. This means a male BMI of 25 generally represents less body fat than a female
+          BMI of 25.
+        </p>
+        <p class="mt-3">
+          The CDC reports the average BMI for American men across all ages is around 28.6 — technically
+          in the overweight range. This reflects population-wide trends rather than a healthy target.
+        </p>
+      </section>
+
+      <section>
+        <h2 class="font-display text-2xl font-semibold text-(--color-ink)">
+          Why BMI overestimates fatness in muscular men
+        </h2>
+        <p class="mt-3">
+          BMI only measures weight relative to height — it cannot distinguish between muscle and fat.
+          One kilogram of muscle and one kilogram of fat weigh the same. A 180 cm man weighing 95 kg
+          has a BMI of 29.3 (overweight) regardless of whether he is a powerlifter with 12% body fat
+          or a sedentary person with 35% body fat.
+        </p>
+        <p class="mt-3">
+          Studies have found that up to 40% of men classified as "overweight" by BMI have healthy
+          cardiometabolic profiles. Conversely, "normal-weight obesity" — a normal BMI with high body fat —
+          occurs in roughly 30% of men with BMI under 25.
+        </p>
+      </section>
+
+      <section>
+        <h2 class="font-display text-2xl font-semibold text-(--color-ink)">
+          Waist circumference: a better signal for men
+        </h2>
+        <p class="mt-3">
+          For men, waist circumference is often a stronger predictor of metabolic disease than BMI alone.
+          Fat stored around the abdomen (visceral fat) releases inflammatory markers and raises insulin
+          resistance, blood pressure, and LDL cholesterol.
+        </p>
+        <p class="mt-3">
+          The WHO recommends measuring at the midpoint between the lowest rib and the top of the hip bone
+          (iliac crest). A waist above <strong>102 cm (40 inches)</strong> for men is associated with
+          substantially higher risk of type 2 diabetes, heart disease, and some cancers.
+        </p>
+      </section>
+
+      <section>
+        <h2 class="font-display text-2xl font-semibold text-(--color-ink)">
+          BMI ranges for male athletes
+        </h2>
+        <p class="mt-3">
+          Many elite athletes have BMI values in the 27–35 range. Rugby forwards, American football
+          linemen, and bodybuilders routinely exceed BMI 30 while maintaining low body fat percentages.
+          In these cases, DEXA scans, hydrostatic weighing, or skinfold measurements are far more
+          meaningful tools than BMI.
+        </p>
+        <p class="mt-3">
+          For recreational athletes and gym-goers, the rule of thumb: if your waist is below 94 cm
+          and you have visible fitness markers, your BMI reading is likely inflated by muscle.
+        </p>
+      </section>
+
+      <section>
+        <h2 class="font-display text-2xl font-semibold text-(--color-ink)">
+          When BMI matters most for men
+        </h2>
+        <ul class="mt-3 list-disc pl-5 space-y-2">
+          <li>When used alongside waist circumference and blood markers</li>
+          <li>For tracking long-term weight trends (not a snapshot reading)</li>
+          <li>When assessing insurance or surgical candidacy alongside other risk factors</li>
+          <li>As a first-screen tool in primary care before more detailed assessment</li>
+        </ul>
+      </section>
+
+    </article>
+
+    <div class="mx-auto mt-16 max-w-3xl">
+      <p class="mb-6 text-sm text-(--color-body)">
+        <a href="/" class="text-(--color-link) hover:underline">← Main BMI calculator</a>
+        &nbsp;·&nbsp;
+        <a href="/bmi-calculator-for-women" class="text-(--color-link) hover:underline">BMI for women →</a>
+      </p>
+    </div>
+
   </div>
 </BaseLayout>

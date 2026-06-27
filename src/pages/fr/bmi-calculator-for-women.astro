@@ -1,0 +1,20 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import BmiCalculator from '../../components/BmiCalculator.astro';
+const lang = 'fr';
+---
+<BaseLayout title="Calculateur IMC pour Femmes | BMI Result" description="Calculateur d'IMC spécifique aux femmes. Inclut l'estimation de la masse grasse, le poids sain et les considérations particulières pour les femmes.">
+  <div class="mx-auto max-w-4xl px-4 py-10 sm:px-6">
+    <h1 class="font-display text-3xl font-bold text-(--color-ink)">Calculateur IMC pour Femmes</h1>
+    <p class="mt-3 text-lg text-(--color-body)">L'IMC s'interprète de la même façon pour les hommes et les femmes, mais certains facteurs spécifiques aux femmes doivent être pris en compte.</p>
+    <div class="mt-8"><BmiCalculator lang={lang} /></div>
+    <article class="mt-12 space-y-4 text-(--color-body)">
+      <h2 class="font-display text-2xl font-semibold text-(--color-ink)">IMC et santé féminine</h2>
+      <ul class="list-disc pl-5 space-y-2">
+        <li>Les femmes ont naturellement plus de masse grasse que les hommes — c'est normal et sain.</li>
+        <li>Pendant la grossesse, l'IMC avant grossesse sert uniquement de référence initiale.</li>
+        <li>La ménopause peut redistribuer la graisse vers l'abdomen ; mesurez aussi votre tour de taille.</li>
+      </ul>
+    </article>
+  </div>
+</BaseLayout>
