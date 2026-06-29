@@ -5,9 +5,23 @@ import FaqSection from '../components/FaqSection.astro';
 ---
 
 <BaseLayout
-  title="BMI Calculator for Women — Female Body Mass Index Guide"
+  title="BMI Calculator for Women — Healthy Weight by Age"
   description="Free BMI calculator for women. Understand healthy BMI ranges for adult females, how hormones and body composition affect BMI interpretation, and what a normal BMI means for women."
 >
+
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "BMI Calculator",
+      "url": new URL(Astro.url.pathname, Astro.site).href,
+      "applicationCategory": "HealthApplication",
+      "operatingSystem": "Any",
+      "browserRequirements": "Requires JavaScript",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+    })} />
+  </Fragment>
+
   <div class="mx-auto max-w-6xl px-4 py-10 sm:px-6">
 
     <section class="mb-10 max-w-3xl">

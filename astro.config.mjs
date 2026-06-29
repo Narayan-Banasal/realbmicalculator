@@ -20,5 +20,8 @@ export default defineConfig({
   adapter: cloudflare({
     imageService: 'compile',
   }),
-  integrations: [sitemap({ i18n: { defaultLocale: 'en', locales: { en: 'en-US', hi: 'hi-IN', es: 'es-ES', fr: 'fr-FR' } } })],
+  integrations: [sitemap({
+    filter: (page) => !page.includes('/embed'),
+    i18n: { defaultLocale: 'en', locales: { en: 'en-US', hi: 'hi-IN', es: 'es-ES', fr: 'fr-FR' } }
+  })],
 });

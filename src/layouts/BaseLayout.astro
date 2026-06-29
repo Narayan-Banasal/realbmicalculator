@@ -11,12 +11,13 @@ interface Props {
   canonical?: string;
   noindex?: boolean;
   ogImage?: string;
+  appendBrand?: boolean;
 }
 
-const { title, description, canonical, noindex = false, ogImage } = Astro.props;
+const { title, description, canonical, noindex = false, ogImage, appendBrand = false } = Astro.props;
 const site      = Astro.site ?? new URL('https://bmiresult.com');
 const url       = canonical ? new URL(canonical, site) : new URL(Astro.url.pathname, site);
-const fullTitle = title.includes('Real BMI') ? title : `${title} | BMI Result`;
+const fullTitle = appendBrand ? `${title} | BMI Result` : title;
 const gaId      = 'G-MJ4MPYMNS7';
 const adPubId   = import.meta.env.PUBLIC_ADSENSE_PUB_ID;
 const lang      = getLangFromUrl(Astro.url);
@@ -24,6 +25,16 @@ const lang      = getLangFromUrl(Astro.url);
 const ogImageUrl = ogImage
   ? new URL(ogImage, site).href
   : new URL('/images/og-default.png', site).href;
+
+const isHome = Astro.url.pathname === '/' || locales.some(l => Astro.url.pathname === `/${l}` || Astro.url.pathname === `/${l}/`);
+const segments = Astro.url.pathname.replace(/^\/|\/$/g, '').split('/').filter(Boolean);
+const crumbs = !isHome ? [
+  { name: 'Home', url: new URL('/', site).href },
+  ...segments.map((seg, i) => ({
+    name: seg.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase()),
+    url: new URL(`/${segments.slice(0, i + 1).join('/')}/`, site).href
+  }))
+] : [];
 ---
 
 <!doctype html>
@@ -70,6 +81,39 @@ const ogImageUrl = ogImage
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image"       content={ogImageUrl} />
 
+    {/* Site-wide JSON-LD */}
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "Organization",
+          "@id": "https://bmiresult.com/#org",
+          "name": "BMI Result",
+          "url": "https://bmiresult.com/",
+          "logo": "https://bmiresult.com/favicon.svg"
+        },
+        {
+          "@type": "WebSite",
+          "@id": "https://bmiresult.com/#website",
+          "url": "https://bmiresult.com/",
+          "name": "BMI Result",
+          "publisher": { "@id": "https://bmiresult.com/#org" },
+          "inLanguage": ["en-US","hi-IN","es-ES","fr-FR"]
+        }
+      ]
+    })} />
+
+    {/* Breadcrumbs JSON-LD */}
+    {!isHome && crumbs.length > 0 && (
+      <script type="application/ld+json" set:html={JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": crumbs.map((c, i) => ({
+          "@type": "ListItem", "position": i + 1, "name": c.name, "item": c.url
+        }))
+      })} />
+    )}
+
     <title>{fullTitle}</title>
 
     {/* Force light mode as default — user can override with Dark button */}
@@ -81,22 +125,47 @@ const ogImageUrl = ogImage
       })();
     </script>
 
-    {/* Google Analytics 4 — G-MJ4MPYMNS7 */}
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-MJ4MPYMNS7"></script>
+    {/* Consent Mode v2 — defaults BEFORE any Google tag */}
     <script is:inline>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
+      gtag('consent', 'default', {
+        ad_storage: 'denied',
+        ad_user_data: 'denied',
+        ad_personalization: 'denied',
+        analytics_storage: 'denied',
+        wait_for_update: 500
+      });
+      // Re-apply on next page if user already accepted
+      if (localStorage.getItem('rbmi-cookie-consent') === 'accepted') {
+        gtag('consent', 'update', {
+          ad_storage: 'granted',
+          ad_user_data: 'granted',
+          ad_personalization: 'granted',
+          analytics_storage: 'granted'
+        });
+      }
+    </script>
+
+    {/* Google Analytics 4 — G-MJ4MPYMNS7 */}
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-MJ4MPYMNS7"></script>
+    <script is:inline>
       gtag('js', new Date());
       gtag('config', 'G-MJ4MPYMNS7');
     </script>
 
     {/* Google AdSense — activated once PUBLIC_ADSENSE_PUB_ID is set */}
     {adPubId && (
-      <script
-        async
-        src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${adPubId}`}
-        crossorigin="anonymous"
-      ></script>
+      <script is:inline define:vars={{ adPubId }}>
+        window.__adPubId = adPubId;
+        if (localStorage.getItem('rbmi-cookie-consent') === 'accepted') {
+          var s = document.createElement('script');
+          s.async = true;
+          s.crossOrigin = 'anonymous';
+          s.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=' + adPubId;
+          document.head.appendChild(s);
+        }
+      </script>
     )}
 
     <slot name="head" />
@@ -163,6 +232,21 @@ const ogImageUrl = ogImage
         function dismiss(accepted) {
           localStorage.setItem(CONSENT_KEY, accepted ? 'accepted' : 'declined');
           banner.classList.add('hidden');
+          if (accepted && typeof gtag === 'function') {
+            gtag('consent', 'update', {
+              ad_storage: 'granted',
+              ad_user_data: 'granted',
+              ad_personalization: 'granted',
+              analytics_storage: 'granted'
+            });
+            // Inject AdSense now
+            if (window.__adPubId && !document.querySelector('script[src*="adsbygoogle.js"]')) {
+              var s = document.createElement('script');
+              s.async = true; s.crossOrigin = 'anonymous';
+              s.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=' + window.__adPubId;
+              document.head.appendChild(s);
+            }
+          }
         }
         document.getElementById('cookie-accept')?.addEventListener('click', function () { dismiss(true); });
         document.getElementById('cookie-decline')?.addEventListener('click', function () { dismiss(false); });

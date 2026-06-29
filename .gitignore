@@ -25,3 +25,4 @@ npm-debug.log*
 
 # Project-specific (add any generated local files here)
 /*.png
+disavow.txt

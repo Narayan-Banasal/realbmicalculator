@@ -3,7 +3,21 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import BmiCalculator from '../../components/BmiCalculator.astro';
 const lang = 'fr';
 ---
-<BaseLayout title="Calculateur IMC pour Hommes | BMI Result" description="Calculateur d'IMC pour les hommes. Estimez votre masse grasse, votre poids idéal et votre risque selon votre tour de taille.">
+<BaseLayout title="Calculateur IMC pour Hommes" description="Calculateur d'IMC pour les hommes. Estimez votre masse grasse, votre poids idéal et votre risque selon votre tour de taille.">
+
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "BMI Calculator",
+      "url": new URL(Astro.url.pathname, Astro.site).href,
+      "applicationCategory": "HealthApplication",
+      "operatingSystem": "Any",
+      "browserRequirements": "Requires JavaScript",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+    })} />
+  </Fragment>
+
   <div class="mx-auto max-w-4xl px-4 py-10 sm:px-6">
     <h1 class="font-display text-3xl font-bold text-(--color-ink)">Calculateur IMC pour Hommes</h1>
     <p class="mt-3 text-lg text-(--color-body)">Les hommes ont tendance à avoir plus de masse musculaire, ce qui peut faire paraître leur IMC plus élevé que ce que reflète leur santé réelle.</p>

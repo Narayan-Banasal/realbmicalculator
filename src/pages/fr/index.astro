@@ -5,6 +5,20 @@ import FaqSection from '../../components/FaqSection.astro';
 const lang = 'fr';
 ---
 <BaseLayout title="Calculateur IMC — Indice de Masse Corporelle Gratuit" description="Calculateur d'IMC gratuit et instantané. Entrez votre taille et poids pour calculer votre indice de masse corporelle en kg, lb ou stone. Résultat immédiat avec catégorie et plage de poids sain.">
+
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "BMI Calculator",
+      "url": new URL(Astro.url.pathname, Astro.site).href,
+      "applicationCategory": "HealthApplication",
+      "operatingSystem": "Any",
+      "browserRequirements": "Requires JavaScript",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+    })} />
+  </Fragment>
+
   <div class="mx-auto max-w-6xl px-4 py-10 sm:px-6 sm:py-14">
     <section class="mb-10 max-w-3xl">
       <p class="text-sm font-medium uppercase tracking-wider text-(--color-accent-deep)">bmiresult.com</p>

@@ -4,9 +4,23 @@ import BmiCalculator from '../components/BmiCalculator.astro';
 ---
 
 <BaseLayout
-  title="BMI Calculator for Men — Male Body Mass Index Guide"
+  title="BMI Calculator for Men — Healthy Weight & Body Fat"
   description="Free BMI calculator for men. Learn healthy BMI ranges for adult males, how muscle mass skews BMI readings, waist circumference guidelines, and what BMI numbers actually mean for men."
 >
+
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "BMI Calculator",
+      "url": new URL(Astro.url.pathname, Astro.site).href,
+      "applicationCategory": "HealthApplication",
+      "operatingSystem": "Any",
+      "browserRequirements": "Requires JavaScript",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+    })} />
+  </Fragment>
+
   <div class="mx-auto max-w-6xl px-4 py-10 sm:px-6">
 
     <section class="mb-10 max-w-3xl">
