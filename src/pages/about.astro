@@ -5,21 +5,66 @@ import ProsePage from '../components/ProsePage.astro';
 
 <BaseLayout
   title="About BMI Result — Free BMI Calculator Tool"
-  description="About BMI Result — a free, accurate body mass index tool built for clarity and SEO-friendly health education."
+  description="BMI Result is a free, ad-supported BMI calculator built for fast, accurate body mass index calculation in metric and imperial. Learn about our team and methodology."
 >
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "AboutPage",
+      "name": "About BMI Result",
+      "url": "https://bmiresult.com/about/",
+      "mainEntity": {
+        "@type": "Organization",
+        "@id": "https://bmiresult.com/#org",
+        "name": "BMI Result",
+        "url": "https://bmiresult.com/",
+        "logo": "https://bmiresult.com/favicon.svg",
+        "description": "BMI Result provides free, instant BMI calculation tools with educational health content based on WHO and CDC guidelines."
+      }
+    })} />
+  </Fragment>
+
   <ProsePage title="About BMI Result" lead="We help people understand their body mass index with a fast, honest, mobile-first calculator.">
     <p>
       BMI Result (bmiresult.com) is an independent health utility site. We are not a
       hospital, insurer, or government agency. Our goal is to provide a better user experience than legacy
       calculator pages: instant BMI results, accessible design, dark mode, and clear educational content.
     </p>
+
+    <h2 class="font-display text-xl font-semibold text-(--color-ink) mt-8">Our methodology</h2>
+    <p>
+      All BMI calculations use the standard formula recommended by the
+      <a href="https://www.who.int/news-room/fact-sheets/detail/obesity-and-overweight" target="_blank" rel="noopener" class="text-(--color-link) hover:underline">World Health Organization (WHO)</a>:
+      <strong>BMI = weight (kg) ÷ height² (m)</strong>. Adult BMI categories follow the WHO classification
+      (underweight &lt;18.5, normal 18.5–24.9, overweight 25–29.9, obese ≥30). For children and teens,
+      we use age- and sex-specific percentile charts based on
+      <a href="https://www.cdc.gov/growthcharts/" target="_blank" rel="noopener" class="text-(--color-link) hover:underline">CDC growth chart data</a>.
+    </p>
+
+    <h2 class="font-display text-xl font-semibold text-(--color-ink) mt-8">Content standards</h2>
+    <p>
+      Health content on this site is written for general educational purposes and is based on peer-reviewed
+      research and official guidelines from the WHO, CDC, and NHLBI. We clearly state the
+      <a href="/" class="text-(--color-link) hover:underline">known limitations of BMI</a> — including
+      its inability to distinguish muscle from fat, ethnic variation in risk thresholds, and unsuitability
+      during pregnancy. We encourage all users to consult a qualified healthcare professional for
+      personal health decisions.
+    </p>
+
+    <h2 class="font-display text-xl font-semibold text-(--color-ink) mt-8">Editorial independence</h2>
+    <p>
+      BMI Result is funded by advertising. Advertisers have no influence over our calculations, content,
+      or health recommendations. We do not sell user data.
+    </p>
+
+    <h2 class="font-display text-xl font-semibold text-(--color-ink) mt-8">Who we serve</h2>
     <p>
       Content on this site is written for adults in the United States and internationally who search for
-      “BMI calculator” and related terms. We cite standard WHO adult BMI categories and encourage users to
-      consult healthcare professionals for personal decisions.
+      "BMI calculator" and related terms. We support English, Hindi, Spanish, and French.
     </p>
-    <p>
-      Questions? Visit our <a href="/contact" class="text-(--color-link) hover:underline">contact page</a>.
+
+    <p class="mt-6">
+      Questions? Visit our <a href="/contact/" class="text-(--color-link) hover:underline">contact page</a>.
     </p>
   </ProsePage>
 </BaseLayout>

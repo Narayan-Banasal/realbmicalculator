@@ -16,7 +16,8 @@ interface Props {
 
 const { title, description, canonical, noindex = false, ogImage, appendBrand = false } = Astro.props;
 const site      = Astro.site ?? new URL('https://bmiresult.com');
-const url       = canonical ? new URL(canonical, site) : new URL(Astro.url.pathname, site);
+const rawPath   = Astro.url.pathname.endsWith('/') ? Astro.url.pathname : `${Astro.url.pathname}/`;
+const url       = canonical ? new URL(canonical, site) : new URL(rawPath, site);
 const fullTitle = appendBrand ? `${title} | BMI Result` : title;
 const gaId      = 'G-MJ4MPYMNS7';
 const adPubId   = import.meta.env.PUBLIC_ADSENSE_PUB_ID;

@@ -13,11 +13,15 @@ export function useTranslations(lang: Lang) {
   };
 }
 
-/** Builds the equivalent URL for a given language. */
+/** Builds the equivalent URL for a given language. Always includes trailing slash. */
 export function getLocalizedPath(lang: Lang, pathname: string): string {
   const stripped = pathname.replace(/^\/(hi|es|fr)(\/|$)/, '/');
-  if (lang === defaultLang) return stripped || '/';
-  return `/${lang}${stripped === '/' ? '' : stripped}`;
+  if (lang === defaultLang) {
+    const path = stripped || '/';
+    return path.endsWith('/') ? path : `${path}/`;
+  }
+  const base = `/${lang}${stripped === '/' ? '' : stripped}`;
+  return base.endsWith('/') ? base : `${base}/`;
 }
 
 /**
@@ -41,7 +45,7 @@ export function safeLocalizedPath(lang: Lang, pathname: string): string {
   if (lang === defaultLang || localizedPages.has(bare)) {
     return getLocalizedPath(lang, bare);
   }
-  return `/${lang}`;
+  return `/${lang}/`;
 }
 
 /** All locales (used for hreflang generation). */
